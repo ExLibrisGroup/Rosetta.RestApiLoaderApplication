@@ -8,8 +8,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.apache.commons.io.IOUtils;
-
 
 
 public class EntityLifecycleServlet extends GenericServlet {

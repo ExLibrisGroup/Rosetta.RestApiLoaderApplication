@@ -14,19 +14,35 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import eu.scapeproject.Sip.STATE;
 
-
+/**
+ * @author Shai Ben-Hur
+ *
+ * The loader application uses methods that are defined as part of the Connector API for connecting to the repository and ingesting the SIP into the repository.
+ *
+ */
 public class LoaderApplication {
 
     private URI repoURI;;
     private Deque<Sip> sipQueue;
     private LoaderDao loaderDao;
 
+    /**
+     * Constructor for the loader application. Initials the data access layer and sip queue.
+     *
+     * @param repoURI the repository URI
+     * @throws Exception
+     */
     public LoaderApplication (URI repoURI) throws Exception {
     	loaderDao = new LoaderDao();
     	this.repoURI = repoURI;
     	this.sipQueue = new LinkedList<Sip>();
     }
 
+    /**
+     * Add a sip to the ingest queue
+     * @param uri the sip URI.
+     * @throws SQLException
+     */
     public void enqueuSip(URI uri) throws SQLException {
     	Sip sip = new Sip();
     	sip.setState(STATE.PENDING);
@@ -35,6 +51,11 @@ public class LoaderApplication {
     	sipQueue.add(sip);
     }
 
+    /**
+     * Activates the ingest process.
+     * All Sips are loaded from the DB into the queue when this function is lunched.
+     * @throws Exception
+     */
     public void ingestIEs() throws Exception {
 
     	sipQueue = loaderDao.getAllSipsByState(STATE.PENDING);
@@ -66,21 +87,33 @@ public class LoaderApplication {
     	}
     }
 
-    public void ingestIELyfeCycle(String entityId) throws Exception {
+    /**
+     * retrieve the life cycle of a sip using its id
+     * @param entityId
+     * @throws Exception
+     */
+    public void getSipLifeCycle(String entityId) throws Exception {
     	HttpGet get = new HttpGet(repoURI.toASCIIString() + "/lifecycle?Id=" + entityId);
     	HttpResponse resp = new DefaultHttpClient().execute(get);
     	String out = IOUtils.toString(resp.getEntity().getContent());
+
     	get.releaseConnection();
-
     	System.out.println(out);
-
     }
 
+    /**
+     * Safety closes the DB connections.
+     * @throws SQLException
+     */
     public void shutdown() throws SQLException {
     	loaderDao.closeStatments();
     	loaderDao.shutdown();
     }
 
+    /**
+     * Clean the queue by deleting all the records from the DB.
+     * @throws SQLException
+     */
     public void cleanQueue() throws SQLException {
     	loaderDao.deleteSacpeSips();
     }
