@@ -2,6 +2,7 @@ package eu.scapeproject.test;
 
 import java.io.FileOutputStream;
 import java.net.URI;
+import java.util.Random;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -19,8 +20,8 @@ public class AppLoaderTests {
 	private static String baseUrl;
 
 	@Test
-	public void testPost () throws Exception {
-		LoaderApplication loaderApplication = new LoaderApplication(URI.create(baseUrl + "/entity-async"));
+	public void testIngestIEs() throws Exception {
+		LoaderApplication loaderApplication = new LoaderApplication(URI.create(baseUrl));
 		loaderApplication.cleanQueue();
 
 		for (int i=0; i<100; i++) {
@@ -36,11 +37,20 @@ public class AppLoaderTests {
 		loaderApplication.shutdown();
 	}
 
+	@Test
+	public void testlifeCycle() throws Exception {
+		LoaderApplication loaderApplication = new LoaderApplication(URI.create(baseUrl));
+		loaderApplication.ingestIELyfeCycle("IE-" + Math.abs(new Random().nextInt()));
+		loaderApplication.shutdown();
+	}
+
 	@BeforeClass
 	public static void initServletContainer() throws Exception {
 		tester = new ServletTester();
 		tester.setContextPath("/");
-		tester.addServlet(DummyRepositoryServlet.class, "/entity-async");
+		tester.addServlet(EntitySyncServlet.class, "/entity-async");
+		tester.addServlet(EntityLifecycleServlet.class, "/lifecycle");
+
 		baseUrl = tester.createSocketConnector(true);
 		tester.start();
 	}

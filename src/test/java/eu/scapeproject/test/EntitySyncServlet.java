@@ -14,7 +14,7 @@ import eu.scapeproject.model.mets.SCAPEMarshaller;
 
 
 
-public class DummyRepositoryServlet extends GenericServlet {
+public class EntitySyncServlet extends GenericServlet {
 
 	private static final long serialVersionUID = 1L;
 

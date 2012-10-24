@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -48,7 +49,7 @@ public class LoaderApplication {
 				loaderDao.updateSip(sip);
 
 				ByteArrayEntity byteArrayEntity = new ByteArrayEntity(IOUtils.toString(sip.getUri().toURL().openStream()).getBytes());
-				HttpPost post = new HttpPost(repoURI.toASCIIString());
+				HttpPost post = new HttpPost(repoURI.toASCIIString() + "/entity-async");
 				post.setEntity(byteArrayEntity);
 				HttpResponse resp = new DefaultHttpClient().execute(post);
 				sipId = IOUtils.toString(resp.getEntity().getContent());
@@ -63,6 +64,16 @@ public class LoaderApplication {
 
     		loaderDao.updateSip(sip);
     	}
+    }
+
+    public void ingestIELyfeCycle(String entityId) throws Exception {
+    	HttpGet get = new HttpGet(repoURI.toASCIIString() + "/lifecycle?Id=" + entityId);
+    	HttpResponse resp = new DefaultHttpClient().execute(get);
+    	String out = IOUtils.toString(resp.getEntity().getContent());
+    	get.releaseConnection();
+
+    	System.out.println(out);
+
     }
 
     public void shutdown() throws SQLException {
