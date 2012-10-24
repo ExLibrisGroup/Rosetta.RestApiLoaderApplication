@@ -18,6 +18,8 @@ import eu.scapeproject.Sip.STATE;
  * @author Shai Ben-Hur
  *
  * The loader application uses methods that are defined as part of the Connector API for connecting to the repository and ingesting the SIP into the repository.
+ * The loader application has a persistent layer that is build out of HSQLDB (simple relational database engine).
+ * All changes and states of the application are saved on a simple text file (scape.db.script).
  *
  */
 public class LoaderApplication {

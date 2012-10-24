@@ -15,7 +15,6 @@ import eu.scapeproject.model.mets.SCAPEMarshaller;
 import eu.scapeproject.model.util.TestUtil;
 
 /**
- *
  * @author Shai Ben-Hur
  *
  * Prior to the test run this class will load embedded Jetty (HTTP server) that will be used as a servelt container emulating the repository application.
@@ -32,6 +31,7 @@ public class AppLoaderTests {
 	/**
 	 * Uses the scape-dto project to create 100 random SIPs and enqueue them into the loader application queue.
 	 * The test activates the loader application ingestIEs function and verify that the ingest process has been completed without errors.
+	 * Each sip will be posted by the loader application to the EntitySyncServlet which will print the IE id and return a random sip id.
 	 * @throws Exception
 	 */
 	@Test
@@ -54,6 +54,7 @@ public class AppLoaderTests {
 
 	/**
 	 * Randomize an IE id and call the loader application getSipLifeCycle function.
+	 * A permanent xml will be return from the EntityLifecycleServlet
 	 * @throws Exception
 	 */
 	@Test
@@ -72,7 +73,6 @@ public class AppLoaderTests {
 		baseUrl = tester.createSocketConnector(true);
 		tester.start();
 	}
-
 
 	@AfterClass
 	public static void cleanupServletContainer() throws Exception {

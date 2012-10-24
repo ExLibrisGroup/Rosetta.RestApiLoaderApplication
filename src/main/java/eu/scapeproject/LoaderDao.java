@@ -13,6 +13,12 @@ import java.util.LinkedList;
 
 import eu.scapeproject.Sip.STATE;
 
+/**
+ * @author Shai Ben-Hur
+ *
+ * The loader application persistent layer - build out of HSQLDB (simple relational database engine).
+ * All changes and states of the application are saved on a simple text file (scape.db.script).
+ */
 public class LoaderDao {
 	private Connection conn;
 	private PreparedStatement insertStatment;
