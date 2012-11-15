@@ -17,9 +17,10 @@ public class EntityLifecycleServlet extends GenericServlet {
     @Override
     public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        String entityId = request.getParameter("Id");
+        //String entityId = request.getParameter("Id");
+       
 
-        String lifeCycleXml = "<lifecyclestate id=\"" + entityId + "\" state=\"INGESTED\">" +
+        String lifeCycleXml = "<lifecyclestate id=\"" + "bla" +  "\" state=\"INGESTED\">" +
     	                      	"<details>Ingest finished successfully at 6/27/2012 13:34:57</details>" +
     	                      "</lifecyclestate>";
 

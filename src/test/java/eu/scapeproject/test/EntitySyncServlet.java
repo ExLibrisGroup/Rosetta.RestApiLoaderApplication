@@ -34,6 +34,17 @@ public class EntitySyncServlet extends GenericServlet {
 
         int sipId = Math.abs(new Random().nextInt());
         System.out.println("Repository Generated Sip ID:'" + sipId + "' ");
-        out.print(sipId);
+        
+        String output = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+                        "<scape:identifier xmlns:mets=\"http://www.loc.gov/METS/\"" + 
+                        "xmlns:scape=\"http://scapeproject.eu/model\" xmlns:ns3=\"http::/scapeproject.eu/model\"" +
+                        "xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\"" +
+                        "xmlns:premis=\"http://www.loc.gov/standards/premis\" xmlns:textmd=\"info:lc/xmlns/textmd-v3\""+
+                        "xmlns:mix=\"http://www.loc.gov/mix/v10\" xmlns:fits=\"http://hul.harvard.edu/ois/xml/ns/fits/fits_output\""+
+                        "xmlns:amd=\"http://www.loc.gov/AMD/\" xmlns:vmd=\"http://www.loc.gov/videoMD/\" xmlns:ns13=\"info:lc/xmlns/premis-v2\" type=\"String\">" +
+                        "<scape:value>" +sipId + "</scape:value>" +
+                        "</scape:identifier>";
+        
+        out.print(output);
     }
 }

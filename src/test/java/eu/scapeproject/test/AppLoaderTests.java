@@ -13,6 +13,8 @@ import eu.scapeproject.LoaderApplication;
 import eu.scapeproject.model.IntellectualEntity;
 import eu.scapeproject.model.mets.SCAPEMarshaller;
 import eu.scapeproject.model.util.TestUtil;
+import eu.scapeproject.pt.main.Configuration;
+
 
 /**
  * @author Shai Ben-Hur
@@ -27,7 +29,8 @@ public class AppLoaderTests {
 
 	private static ServletTester tester;
 	private static String baseUrl;
-
+	private static Configuration conf;
+	
 	/**
 	 * Uses the scape-dto project to create 100 random SIPs and enqueue them into the loader application queue.
 	 * The test activates the loader application ingestIEs function and verify that the ingest process has been completed without errors.
@@ -36,11 +39,12 @@ public class AppLoaderTests {
 	 */
 	@Test
 	public void testIngestIEs() throws Exception {
-		LoaderApplication loaderApplication = new LoaderApplication(URI.create(baseUrl));
+		
+		LoaderApplication loaderApplication = new LoaderApplication(conf);
 		loaderApplication.cleanQueue();
 
 		for (int i=0; i<100; i++) {
-			String sipFileName = "sips/mets_entity_" + i + ".xml";
+			String sipFileName = conf.getDir() + "mets_entity_" + i + ".xml";
 			java.io.File xmlFile=new java.io.File(sipFileName);
 			IntellectualEntity entity=TestUtil.createRandomEntity();
 			FileOutputStream out=new FileOutputStream(xmlFile);
@@ -55,9 +59,13 @@ public class AppLoaderTests {
 	/**
 	 * Randomize an IE id and call the loader application getSipLifeCycle function.
 	 * A permanent xml will be return from the EntityLifecycleServlet
+	 * 
+	 * Please use AppLoaderTCKTest instead
+	 * 
 	 * @throws Exception
 	 */
-	@Test
+
+	@Deprecated
 	public void testlifeCycle() throws Exception {
 		LoaderApplication loaderApplication = new LoaderApplication(URI.create(baseUrl));
 		loaderApplication.getSipLifeCycle("IE-" + Math.abs(new Random().nextInt()));
@@ -66,11 +74,18 @@ public class AppLoaderTests {
 
 	@BeforeClass
 	public static void initServletContainer() throws Exception {
+		// Configuration of the job run
+		conf = new Configuration(); 
+        conf.setDir("sips/");
+        conf.setIngest("entity-async");
+        conf.setLifecycle("lifecycle");
+		
 		tester = new ServletTester();
 		tester.setContextPath("/");
-		tester.addServlet(EntitySyncServlet.class, "/entity-async");
-		tester.addServlet(EntityLifecycleServlet.class, "/lifecycle");
+		tester.addServlet(EntitySyncServlet.class, "/"+ conf.getIngest());
+		tester.addServlet(EntityLifecycleServlet.class, "/" + conf.getLifecycle());
 		baseUrl = tester.createSocketConnector(true);
+		conf.setUrl(baseUrl);
 		tester.start();
 	}
 

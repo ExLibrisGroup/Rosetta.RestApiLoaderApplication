@@ -13,6 +13,7 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import eu.scapeproject.Sip.STATE;
+import eu.scapeproject.pt.main.Configuration;
 
 /**
  * @author Shai Ben-Hur
@@ -27,6 +28,7 @@ public class LoaderApplication {
     private URI repoURI;;
     private Deque<Sip> sipQueue;
     private LoaderDao loaderDao;
+    private Configuration conf;
 
     /**
      * Constructor for the loader application. Initials the data access layer and sip queue.
@@ -38,6 +40,13 @@ public class LoaderApplication {
     	loaderDao = new LoaderDao();
     	this.repoURI = repoURI;
     	this.sipQueue = new LinkedList<Sip>();
+    }
+    
+    public LoaderApplication(Configuration conf) throws Exception { 
+    	loaderDao = new LoaderDao();
+    	this.repoURI = new URI(conf.getUrl());
+    	this.sipQueue = new LinkedList<Sip>();
+    	this.conf = conf;
     }
 
     /**
@@ -72,14 +81,18 @@ public class LoaderApplication {
 				loaderDao.updateSip(sip);
 
 				ByteArrayEntity byteArrayEntity = new ByteArrayEntity(IOUtils.toString(sip.getUri().toURL().openStream()).getBytes());
-				HttpPost post = new HttpPost(repoURI.toASCIIString() + "/entity-async");
+				HttpPost post = new HttpPost(repoURI.toASCIIString() + "/" + conf.getIngest());
+
+//				HttpPost post = new HttpPost(repoURI.toASCIIString() + "/entity-async");
 				post.setEntity(byteArrayEntity);
 				HttpResponse resp = new DefaultHttpClient().execute(post);
-				sipId = IOUtils.toString(resp.getEntity().getContent());
+//				sipId = IOUtils.toString(resp.getEntity().getContent());
+				sipId = extractSipId(IOUtils.toString(resp.getEntity().getContent()));
 				sip.setSipId(sipId);
 				sip.setState(STATE.SUBMITTED_TO_REPOSITORY);
+				System.out.println("Return Code: " + resp.getStatusLine().getStatusCode());
 				post.releaseConnection();
-
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				sip.setState(STATE.FAILED);
@@ -96,7 +109,10 @@ public class LoaderApplication {
      */
     public void getSipLifeCycle(String entityId) throws Exception {
     	HttpGet get = new HttpGet(repoURI.toASCIIString() + "/lifecycle?Id=" + entityId);
+//    	HttpGet get = new HttpGet(repoURI.toASCIIString() + "/" + conf.getLifecycle() +"/" + entityId);
     	HttpResponse resp = new DefaultHttpClient().execute(get);
+    	System.out.println("RETURN CODE: " + resp.getStatusLine().getStatusCode());
+    	
     	String out = IOUtils.toString(resp.getEntity().getContent());
 
     	get.releaseConnection();
@@ -118,5 +134,20 @@ public class LoaderApplication {
      */
     public void cleanQueue() throws SQLException {
     	loaderDao.deleteSacpeSips();
+    }
+    
+    
+    // just a helper method - maybe better to use XPath 
+    // added to extract the sipId form the response
+    private String extractSipId(String response) { 
+    	String begin = "<scape:value>";
+		String end = "</scape:value>";
+		int beginIndex = response.indexOf(begin);
+		int endIndex = response.indexOf(end);
+		return response.substring(beginIndex+begin.length(), endIndex);
+    }
+    
+    public Deque<Sip> getSipsByState(STATE state) throws SQLException { 
+    	return loaderDao.getAllSipsByState(state);		
     }
 }
