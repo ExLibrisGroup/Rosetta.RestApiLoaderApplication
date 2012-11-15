@@ -41,7 +41,7 @@ public class AppLoaderMainTest {
         assertFalse(MOCK.isRunning());
     }
     
-    //@Test
+   // @Test
     public void testSipGeneration()  { 
     	try {
     		LoaderIO io = new LoaderIO(); 
