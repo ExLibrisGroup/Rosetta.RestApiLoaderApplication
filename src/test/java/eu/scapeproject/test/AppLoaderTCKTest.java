@@ -20,7 +20,7 @@ import eu.scapeproject.model.IntellectualEntity;
 import eu.scapeproject.model.mets.SCAPEMarshaller;
 import eu.scapeproject.model.util.TestUtil;
 import eu.scapeproject.pt.main.Configuration;
-import eu.scapeproject.pt.main.LoaderIO;
+
 
 
 /**
@@ -30,7 +30,6 @@ import eu.scapeproject.pt.main.LoaderIO;
  */
 public class AppLoaderTCKTest {
 	
-	private static String baseUrl = "http://localhost:8387";
 	private static final ConnectorAPIMock MOCK = new ConnectorAPIMock(8387);
 	private static LoaderApplication loaderApplication;
 	private static Configuration conf;
@@ -67,8 +66,6 @@ public class AppLoaderTCKTest {
     	
     	
 		loaderApplication.cleanQueue();
-
-		LoaderIO io = new LoaderIO(); 
 		
 		for (int i=0; i<100; i++) {
 			String sipFileName = "sips/mets_entity_" + i + ".xml";
