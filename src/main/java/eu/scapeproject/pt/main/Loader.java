@@ -23,8 +23,8 @@ import eu.scapeproject.Sip.STATE;
  * -d,--dir <arg>     Local input directory (Required)
  * -u,--url <arg>     base URL of the repository (Required).
  * -h,--help          print this message.
- * -i,--ingest        ingest REST endpoint [default: entity-async] (Optional).
- * -l,--lifecycle     lifecycle REST endpoint [default: lifecycle] (Optional).
+ * -i,--ingest  <arg>      ingest REST endpoint [default: entity-async] (Optional).
+ * -l,--lifecycle <arg>    lifecycle REST endpoint [default: lifecycle] (Optional).
  *                    
  * @author mhn
  *
