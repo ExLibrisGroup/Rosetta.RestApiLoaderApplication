@@ -108,8 +108,8 @@ public class LoaderApplication {
      * @throws Exception
      */
     public void getSipLifeCycle(String entityId) throws Exception {
-    	HttpGet get = new HttpGet(repoURI.toASCIIString() + "/lifecycle?Id=" + entityId);
-//    	HttpGet get = new HttpGet(repoURI.toASCIIString() + "/" + conf.getLifecycle() +"/" + entityId);
+//    	HttpGet get = new HttpGet(repoURI.toASCIIString() + "/lifecycle?Id=" + entityId);
+    	HttpGet get = new HttpGet(repoURI.toASCIIString() + "/" + conf.getLifecycle() +"/" + entityId);
     	HttpResponse resp = new DefaultHttpClient().execute(get);
     	System.out.println("RETURN CODE: " + resp.getStatusLine().getStatusCode());
     	
