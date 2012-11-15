@@ -17,9 +17,9 @@ import eu.scapeproject.Sip.STATE;
 
 /**
  * * Utility command line application for the SCAPE Loader Application.
- * usage: {hadoop jar|java -jar}
- *       target/tb-lsdr-seqfileutility-0.1-SNAPSHOT-jar-with-dependencies.ja
- *       r [-c <arg>] [-d <arg>] [-e <arg>] [-h] [-m] [-t]
+ * usage: {java -jar}
+ *       target/loader-app-0.0.1-SNAPSHOT-jar-with-dependencies.jar [-d
+       <arg>] [-h] [-i <arg>] [-l <arg>] [-u <arg>]
  * -d,--dir <arg>     Local input directory (Required)
  * -u,--url <arg>     base URL of the repository (Required).
  * -h,--help          print this message.
