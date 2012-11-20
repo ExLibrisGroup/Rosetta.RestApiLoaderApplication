@@ -82,8 +82,6 @@ public class LoaderApplication {
 
 				ByteArrayEntity byteArrayEntity = new ByteArrayEntity(IOUtils.toString(sip.getUri().toURL().openStream()).getBytes());
 				HttpPost post = new HttpPost(repoURI.toASCIIString() + "/" + conf.getIngest());
-
-//				HttpPost post = new HttpPost(repoURI.toASCIIString() + "/entity-async");
 				post.setEntity(byteArrayEntity);
 				HttpResponse resp = new DefaultHttpClient().execute(post);
 //				sipId = IOUtils.toString(resp.getEntity().getContent());
@@ -112,9 +110,7 @@ public class LoaderApplication {
     	HttpGet get = new HttpGet(repoURI.toASCIIString() + "/" + conf.getLifecycle() +"/" + entityId);
     	HttpResponse resp = new DefaultHttpClient().execute(get);
     	System.out.println("RETURN CODE: " + resp.getStatusLine().getStatusCode());
-    	
     	String out = IOUtils.toString(resp.getEntity().getContent());
-
     	get.releaseConnection();
     	System.out.println(out);
     }

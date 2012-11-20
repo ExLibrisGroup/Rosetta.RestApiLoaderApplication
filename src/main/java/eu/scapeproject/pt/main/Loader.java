@@ -3,12 +3,19 @@ package eu.scapeproject.pt.main;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.Deque;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.ParseException;
 
 import eu.scapeproject.pt.main.Options;
+import eu.scapeproject.pt.threads.LifecycleRunnable;
+import eu.scapeproject.pt.threads.StopLifecycelTask;
+
 import org.apache.commons.cli.PosixParser;
 
 import eu.scapeproject.LoaderApplication;
@@ -57,18 +64,24 @@ public class Loader {
 				// ingest
 				loaderapp.ingestIEs();	
 				
-				// retrieve lifecycle state
-				Deque<Sip> q = loaderapp.getSipsByState(STATE.SUBMITTED_TO_REPOSITORY);
-				
-				for (Sip sip : q) {
-					String id = URLEncoder.encode(sip.getSipId().trim(), "UTF-8");
-					loaderapp.getSipLifeCycle(id);
-				}
-				
+				// retrieve lifecycle state as a scheduled task
+				System.out.println("Retrieve Lifecycle states every 5 seconds - shutdown after 30 seconds");
+				ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+				Runnable worker = new LifecycleRunnable(scheduler, loaderapp);
+				long initialDelay = 10;
+				long period = 5;
+				ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(worker, initialDelay, period, TimeUnit.SECONDS);
+
+				// this is just a mad shutdown thread after 30 seconds - nothing real 
+				// condition should be: all objects are ingested @TODO
+				long  shutdownAfter = 30;
+				Runnable stopLCCheck = new StopLifecycelTask(future, scheduler, loaderapp);
+				ScheduledFuture<?> stopFuture = scheduler.schedule(stopLCCheck, shutdownAfter, TimeUnit.SECONDS);
+		        System.out.println("stop LC task after: " + shutdownAfter + " seconds " + stopFuture.get());
+
 			} else {
 				System.out.println("Empty directory. No SIPs to process");
 			}
-			
 			
 			loaderapp.shutdown();
 			

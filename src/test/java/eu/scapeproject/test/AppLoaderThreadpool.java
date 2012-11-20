@@ -3,14 +3,24 @@ package eu.scapeproject.test;
 import static org.junit.Assert.assertFalse;
 
 import java.io.FileOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 
 import eu.scapeproject.ConnectorAPIMock;
 import eu.scapeproject.LoaderApplication;
@@ -20,15 +30,11 @@ import eu.scapeproject.model.IntellectualEntity;
 import eu.scapeproject.model.mets.SCAPEMarshaller;
 import eu.scapeproject.model.util.TestUtil;
 import eu.scapeproject.pt.main.Configuration;
+import eu.scapeproject.pt.threads.LifecycleRunnable;
+import eu.scapeproject.pt.threads.StopLifecycelTask;
 
-
-
-/**
- * Test with the TCK instead of the Jetty(servlet) solution used with AppLoaderTests
- * @author mhn
- *
- */
-public class AppLoaderTCKTest {
+public class AppLoaderThreadpool {
+	
 	
 	private static final ConnectorAPIMock MOCK = new ConnectorAPIMock(8387);
 	private static LoaderApplication loaderApplication;
@@ -57,7 +63,6 @@ public class AppLoaderTCKTest {
         MOCK.stop();
         MOCK.close();
         assertFalse(MOCK.isRunning());
-        
         loaderApplication.shutdown();
     }
     
@@ -65,7 +70,8 @@ public class AppLoaderTCKTest {
     @Test
     public void testIngest() throws Exception { 
     	
- 	for (int i=0; i<100; i++) {
+		
+		for (int i=0; i<100; i++) {
 			String sipFileName = "sips/mets_entity_" + i + ".xml";
 			java.io.File xmlFile=new java.io.File(sipFileName);
 			IntellectualEntity entity=TestUtil.createRandomEntity();
@@ -78,17 +84,23 @@ public class AppLoaderTCKTest {
     	
     }
     
-    @Test
-	public void testlifeCycle() throws Exception {
+	
+	@Test
+	public void testLifecyclepool() throws Exception { 
 		
-		Deque<Sip> q = loaderApplication.getSipsByState(STATE.SUBMITTED_TO_REPOSITORY);
-		
-		for (Sip sip : q) {
-			String id = URLEncoder.encode(sip.getSipId().trim(), "UTF-8");
-			loaderApplication.getSipLifeCycle(id);
-		}
-		
-		
+		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+	
+		Runnable worker = new LifecycleRunnable(scheduler, loaderApplication);
+		// über command line interface konfigurierbar machen
+		long initialDelay = 10;
+		long period = 5;
+		ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(worker, initialDelay, period, TimeUnit.SECONDS);
+		// this is just a mad shutdown thread after 30 seconds - nothing real 
+		// condition should be: all objects are ingested
+		long  shutdownDelay = 30;
+		Runnable stopLCCheck = new StopLifecycelTask(future, scheduler, loaderApplication);
+		ScheduledFuture<?> stopFuture = scheduler.schedule(stopLCCheck, shutdownDelay, TimeUnit.SECONDS);
+        System.out.println("stop LC task after: : " + shutdownDelay + " seconds " + stopFuture.get());
 		
 	}
 
