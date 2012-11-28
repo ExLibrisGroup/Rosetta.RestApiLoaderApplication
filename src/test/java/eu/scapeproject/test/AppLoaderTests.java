@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.Random;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -74,6 +75,7 @@ public class AppLoaderTests {
 
 	@BeforeClass
 	public static void initServletContainer() throws Exception {
+		PropertyConfigurator.configure("log4j.properties");
 		// Configuration of the job run
 		conf = new Configuration(); 
         conf.setDir("sips/");

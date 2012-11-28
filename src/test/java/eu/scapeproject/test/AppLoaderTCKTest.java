@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.util.Deque;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -50,6 +51,7 @@ public class AppLoaderTCKTest {
         conf.setLifecycle("lifecycle");
         loaderApplication =  new LoaderApplication(conf);
         loaderApplication.cleanQueue();
+        PropertyConfigurator.configure("log4j.properties");
     }
 
     @AfterClass

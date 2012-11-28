@@ -18,6 +18,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -44,6 +45,7 @@ public class AppLoaderThreadpool {
 
     @BeforeClass
     public static void setup() throws Exception {
+    	PropertyConfigurator.configure("log4j.properties");
         Thread t = new Thread(MOCK);
         t.start();
         while (!MOCK.isRunning()) {
