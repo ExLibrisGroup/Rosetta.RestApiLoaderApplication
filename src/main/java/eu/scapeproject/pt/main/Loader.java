@@ -17,8 +17,12 @@ import eu.scapeproject.pt.threads.LifecycleRunnable;
 import eu.scapeproject.pt.threads.StopLifecycelTask;
 
 import org.apache.commons.cli.PosixParser;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 
 import eu.scapeproject.LoaderApplication;
+import eu.scapeproject.LoaderDao;
 import eu.scapeproject.Sip;
 import eu.scapeproject.Sip.STATE;
 
@@ -37,12 +41,15 @@ import eu.scapeproject.Sip.STATE;
  *
  */
 public class Loader {
+	
+	private static Logger logger =  Logger.getLogger(Loader.class.getName());
 
 	public static void main(String[] args) throws ParseException {
 		
 		CommandLineParser cmdParser = new PosixParser();
 		CommandLine cmd = cmdParser.parse(Options.OPTIONS, args);
 		Configuration conf = new Configuration();
+		PropertyConfigurator.configure("log4j.properties");
 		
 		if ((args.length == 0) || (cmd.hasOption(Options.HELP_OPT))) {
             Options.exit("Usage", 0);
@@ -65,19 +72,19 @@ public class Loader {
 				loaderapp.ingestIEs();	
 				
 				// retrieve lifecycle state as a scheduled task
-				System.out.println("Retrieve Lifecycle states every 5 seconds - shutdown after 30 seconds");
+				logger.info("Retrieve Lifecycle states every 5 seconds - shutdown after 30 seconds");
 				ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 				Runnable worker = new LifecycleRunnable(scheduler, loaderapp);
 				long initialDelay = 10;
-				long period = 5;
+				long period = 10;
 				ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(worker, initialDelay, period, TimeUnit.SECONDS);
 
 				// this is just a mad shutdown thread after 30 seconds - nothing real 
 				// condition should be: all objects are ingested @TODO
-				long  shutdownAfter = 30;
+				long  shutdownAfter = 60;
 				Runnable stopLCCheck = new StopLifecycelTask(future, scheduler, loaderapp);
 				ScheduledFuture<?> stopFuture = scheduler.schedule(stopLCCheck, shutdownAfter, TimeUnit.SECONDS);
-		        System.out.println("stop LC task after: " + shutdownAfter + " seconds " + stopFuture.get());
+		        logger.info("stop Lifecycle task after: " + shutdownAfter + " seconds " + stopFuture.get());
 
 			} else {
 				System.out.println("Empty directory. No SIPs to process");

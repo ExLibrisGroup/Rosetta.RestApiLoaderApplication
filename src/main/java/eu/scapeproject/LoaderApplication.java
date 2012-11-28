@@ -4,6 +4,8 @@ import java.net.URI;
 import java.sql.SQLException;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
@@ -11,6 +13,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.log4j.Logger;
+
 
 import eu.scapeproject.Sip.STATE;
 import eu.scapeproject.pt.main.Configuration;
@@ -29,6 +33,8 @@ public class LoaderApplication {
     private Deque<Sip> sipQueue;
     private LoaderDao loaderDao;
     private Configuration conf;
+    
+    private static Logger logger =  Logger.getLogger(LoaderApplication.class.getName());
 
     /**
      * Constructor for the loader application. Initials the data access layer and sip queue.
@@ -88,7 +94,7 @@ public class LoaderApplication {
 				sipId = extractSipId(IOUtils.toString(resp.getEntity().getContent()));
 				sip.setSipId(sipId);
 				sip.setState(STATE.SUBMITTED_TO_REPOSITORY);
-				System.out.println("Return Code: " + resp.getStatusLine().getStatusCode());
+				logger.info("Return Code: " + resp.getStatusLine().getStatusCode() + " SIP ID: " + sipId);
 				post.releaseConnection();
 				
 			} catch (Exception e) {
@@ -105,14 +111,17 @@ public class LoaderApplication {
      * @param entityId
      * @throws Exception
      */
-    public void getSipLifeCycle(String entityId) throws Exception {
+    public String getSipLifeCycle(String entityId) throws Exception {
 //    	HttpGet get = new HttpGet(repoURI.toASCIIString() + "/lifecycle?Id=" + entityId);
     	HttpGet get = new HttpGet(repoURI.toASCIIString() + "/" + conf.getLifecycle() +"/" + entityId);
+    	if(logger.isDebugEnabled()) {
+    		logger.debug("GET: " + get.toString()) ;
+    	}
     	HttpResponse resp = new DefaultHttpClient().execute(get);
-    	System.out.println("RETURN CODE: " + resp.getStatusLine().getStatusCode());
-    	String out = IOUtils.toString(resp.getEntity().getContent());
+    	String out = extractLifecyclestate(IOUtils.toString(resp.getEntity().getContent()));
+    	logger.info(out + "  RETURN CODE: " + resp.getStatusLine().getStatusCode());
     	get.releaseConnection();
-    	System.out.println(out);
+    	return out;
     }
 
     /**
@@ -141,6 +150,21 @@ public class LoaderApplication {
 		int beginIndex = response.indexOf(begin);
 		int endIndex = response.indexOf(end);
 		return response.substring(beginIndex+begin.length(), endIndex);
+    }
+    
+    // a helper to extract the lifecycle state out of the response
+    private String extractLifecyclestate(String response) { 
+    	Pattern pattern = Pattern.compile("lifecyclestate=.*\">"); 
+		Matcher matcher = pattern.matcher(response);
+		String result = "FAILED"; 
+		while (matcher.find()) { 
+		     String[] x = matcher.group().split("=");
+		     if(x.length > 1) {
+		       result = x[1].substring(1, x[1].length()-2);
+		     } 
+		}
+		
+		return result; 
     }
     
     public Deque<Sip> getSipsByState(STATE state) throws SQLException { 

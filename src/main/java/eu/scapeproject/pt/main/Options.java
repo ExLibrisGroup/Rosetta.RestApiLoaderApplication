@@ -4,8 +4,8 @@ package eu.scapeproject.pt.main;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+
 
 
 /**
@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 public class Options  {
 	
 	    // Logger instance
-	    private static Logger logger = LoggerFactory.getLogger(Options.class.getName());
+	    private static Logger logger =  Logger.getLogger(Options.class.getName());
 	    // Statics to set up command line arguments
 	    public static final String HELP_FLG = "h";
 	    public static final String HELP_OPT = "help";

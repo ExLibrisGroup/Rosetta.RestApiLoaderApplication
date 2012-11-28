@@ -5,7 +5,7 @@ import java.net.URI;
 
 public class Sip {
 
-	public enum STATE {PENDING, IN_PROGRESS, SUBMITTED_TO_REPOSITORY, FAILED};
+	public enum STATE {PENDING, IN_PROGRESS, SUBMITTED_TO_REPOSITORY, FAILED, INGESTING, INGESTED};
 
 	private long id;
 	private String sipId;
@@ -63,4 +63,12 @@ public class Sip {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	@Override
+	public String toString() {
+		return "Sip [id=" + id + ", sipId=" + sipId + ", uri=" + uri
+				+ ", state=" + state + ", description=" + description + "]";
+	}
+	
+	
 }

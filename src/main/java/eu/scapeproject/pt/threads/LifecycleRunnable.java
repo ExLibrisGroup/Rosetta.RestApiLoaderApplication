@@ -5,7 +5,10 @@ import java.util.Deque;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 
+import org.apache.log4j.Logger;
+
 import eu.scapeproject.LoaderApplication;
+import eu.scapeproject.LoaderDao;
 import eu.scapeproject.Sip;
 import eu.scapeproject.Sip.STATE;
 
@@ -14,11 +17,15 @@ public class LifecycleRunnable implements Runnable {
 
 	private ScheduledExecutorService executor; 
 	private LoaderApplication loaderapp; 
+	private LoaderDao loaderDao;
 	static final boolean DONT_INTERRUPT_IF_RUNNING = true; 
+	
+	private static Logger logger =  Logger.getLogger(LifecycleRunnable.class.getName());
 	
 	public LifecycleRunnable(ScheduledExecutorService executor, LoaderApplication loaderapp) throws Exception {
 		this.executor = executor;
 		this.loaderapp = loaderapp; 
+		this.loaderDao = new LoaderDao();
 	}
 	
 	
@@ -27,13 +34,26 @@ public class LifecycleRunnable implements Runnable {
 		
 		    try { 
 				Deque<Sip> q = loaderapp.getSipsByState(STATE.SUBMITTED_TO_REPOSITORY);
+				if (q.size() == 0) q = loaderapp.getSipsByState(STATE.INGESTING);
 				
 				for (Sip sip : q) {
 					String id = URLEncoder.encode(sip.getSipId().trim(), "UTF-8");
-					loaderapp.getSipLifeCycle(id);
+					String state = loaderapp.getSipLifeCycle(id);
+					if(logger.isDebugEnabled()) {
+						logger.debug(sip.toString());
+					}
+					if (state.equals(STATE.INGESTING.name())) {
+						sip.setState(STATE.INGESTING);
+					} else if (state.equals(STATE.INGESTED.name())) { 
+						sip.setState(STATE.INGESTED);
+					} else if (state.equals(STATE.FAILED.name())) {
+						sip.setState(STATE.FAILED);
+					}
+					
+					loaderDao.updateSip(sip);
 				}
 				
-				System.out.println("Retrieval of Lifecycle objects " + q.size());
+				logger.info("Retrieval of Lifecycle objects " + q.size());
 				
 				if (q.size() == 0) { 
 					executor.shutdown();

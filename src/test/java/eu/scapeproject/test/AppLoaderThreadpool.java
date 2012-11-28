@@ -24,6 +24,7 @@ import org.junit.Test;
 
 import eu.scapeproject.ConnectorAPIMock;
 import eu.scapeproject.LoaderApplication;
+import eu.scapeproject.LoaderDao;
 import eu.scapeproject.Sip;
 import eu.scapeproject.Sip.STATE;
 import eu.scapeproject.model.IntellectualEntity;
