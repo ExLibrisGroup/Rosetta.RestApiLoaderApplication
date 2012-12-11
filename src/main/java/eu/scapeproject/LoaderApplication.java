@@ -1,22 +1,28 @@
 package eu.scapeproject;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 
 
 import eu.scapeproject.Sip.STATE;
+import eu.scapeproject.pt.auth.EsciDocAuthentication;
+import eu.scapeproject.pt.auth.IAuthentication;
 import eu.scapeproject.pt.main.Configuration;
 
 /**
@@ -33,6 +39,7 @@ public class LoaderApplication {
     private Deque<Sip> sipQueue;
     private LoaderDao loaderDao;
     private Configuration conf;
+    private DefaultHttpClient httpclient;
     
     private static Logger logger =  Logger.getLogger(LoaderApplication.class.getName());
 
@@ -53,6 +60,8 @@ public class LoaderApplication {
     	this.repoURI = new URI(conf.getUrl());
     	this.sipQueue = new LinkedList<Sip>();
     	this.conf = conf;
+    	IAuthentication auth = new EsciDocAuthentication();
+    	this.httpclient = auth.logon();
     }
 
     /**
@@ -76,7 +85,9 @@ public class LoaderApplication {
     public void ingestIEs() throws Exception {
 
     	sipQueue = loaderDao.getAllSipsByState(STATE.PENDING);
-
+    	long starttime = System.currentTimeMillis();
+    	int objects =  sipQueue.size();
+    	
     	while (!sipQueue.isEmpty()) {
     		Sip sip = null;
 			String sipId = null;
@@ -89,12 +100,24 @@ public class LoaderApplication {
 				ByteArrayEntity byteArrayEntity = new ByteArrayEntity(IOUtils.toString(sip.getUri().toURL().openStream()).getBytes());
 				HttpPost post = new HttpPost(repoURI.toASCIIString() + "/" + conf.getIngest());
 				post.setEntity(byteArrayEntity);
-				HttpResponse resp = new DefaultHttpClient().execute(post);
-//				sipId = IOUtils.toString(resp.getEntity().getContent());
+				
+				// make sure you are logged in before execute the post! Need to define a DefaultHttpClient before
+				HttpResponse resp = httpclient.execute(post);
+				if (logger.isDebugEnabled()) {
+					List<Cookie> cookies = httpclient.getCookieStore().getCookies();
+					for (Cookie cookie : cookies) {
+						logger.debug(cookie.getName() + ".." + cookie.getValue());
+					}
+				}
+				
 				sipId = extractSipId(IOUtils.toString(resp.getEntity().getContent()));
-				sip.setSipId(sipId);
-				sip.setState(STATE.SUBMITTED_TO_REPOSITORY);
-				logger.info("Return Code: " + resp.getStatusLine().getStatusCode() + " SIP ID: " + sipId);
+				if (sipId != null) {
+					sip.setSipId(sipId);
+					sip.setState(STATE.SUBMITTED_TO_REPOSITORY);
+					logger.info("Return Code: " + resp.getStatusLine().getStatusCode() + " SIP ID: " + sipId);
+				} else { 
+					logger.info("SIP ID is NULL. Is repository up and running?");
+				}
 				post.releaseConnection();
 				
 			} catch (Exception e) {
@@ -104,6 +127,9 @@ public class LoaderApplication {
 
     		loaderDao.updateSip(sip);
     	}
+
+    	long elapsedtime = System.currentTimeMillis() - starttime;
+    	System.out.println("Ingest of "+ objects + " objects finsihed. Total elapsed time: " + elapsedtime + " ms." + " Average time per object: " + elapsedtime/objects + " ms");
     }
 
     /**
@@ -113,13 +139,22 @@ public class LoaderApplication {
      */
     public String getSipLifeCycle(String entityId) throws Exception {
 //    	HttpGet get = new HttpGet(repoURI.toASCIIString() + "/lifecycle?Id=" + entityId);
-    	HttpGet get = new HttpGet(repoURI.toASCIIString() + "/" + conf.getLifecycle() +"/" + entityId);
+    	String uri = repoURI.toASCIIString() + "/" + conf.getLifecycle() +"/" + entityId;
+    	HttpGet get = new HttpGet(uri);
     	if(logger.isDebugEnabled()) {
-    		logger.debug("GET: " + get.toString()) ;
+    		logger.debug(get.toString()) ;
     	}
-    	HttpResponse resp = new DefaultHttpClient().execute(get);
+    	HttpResponse resp = httpclient.execute(get);
+    	if (logger.isDebugEnabled()) {
+	    	List<Cookie> cookies = httpclient.getCookieStore().getCookies();
+			for (Cookie cookie : cookies) {
+				logger.debug(cookie.getName() + ".." + cookie.getValue());
+			}
+    	}
+		
     	String out = extractLifecyclestate(IOUtils.toString(resp.getEntity().getContent()));
-    	logger.info(out + "  RETURN CODE: " + resp.getStatusLine().getStatusCode());
+    	logger.info("ID: " + entityId + " STATUS: " + out + "  RETURN CODE: " + resp.getStatusLine().getStatusCode() + " " + resp.getStatusLine().getReasonPhrase());
+    	
     	get.releaseConnection();
     	return out;
     }
@@ -142,25 +177,36 @@ public class LoaderApplication {
     }
     
     
-    // just a helper method - maybe better to use XPath 
-    // added to extract the sipId form the response
+   /**
+    * added to extract the sipId form the response
+    * @param response
+    * @return
+    */
     private String extractSipId(String response) { 
     	String begin = "<scape:value>";
 		String end = "</scape:value>";
 		int beginIndex = response.indexOf(begin);
 		int endIndex = response.indexOf(end);
-		return response.substring(beginIndex+begin.length(), endIndex);
+		String result = null;
+		if (beginIndex > -1 && endIndex > -1) { 
+			result = response.substring(beginIndex+begin.length(), endIndex);
+		}
+		return result;
     }
     
-    // a helper to extract the lifecycle state out of the response
+    /**
+     *  a helper to extract the lifecycle state out of the response
+     * @param response
+     * @return
+     */
     private String extractLifecyclestate(String response) { 
-    	Pattern pattern = Pattern.compile("lifecyclestate=.*\">"); 
+    	Pattern pattern = Pattern.compile("lifecyclestate=.*\"/>"); 
 		Matcher matcher = pattern.matcher(response);
 		String result = "FAILED"; 
 		while (matcher.find()) { 
 		     String[] x = matcher.group().split("=");
 		     if(x.length > 1) {
-		       result = x[1].substring(1, x[1].length()-2);
+		       result = x[1].substring(1, x[1].length()-3);
 		     } 
 		}
 		

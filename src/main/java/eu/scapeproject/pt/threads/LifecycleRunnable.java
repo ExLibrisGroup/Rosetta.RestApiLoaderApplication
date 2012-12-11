@@ -5,12 +5,15 @@ import java.util.Deque;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 
 import eu.scapeproject.LoaderApplication;
 import eu.scapeproject.LoaderDao;
 import eu.scapeproject.Sip;
 import eu.scapeproject.Sip.STATE;
+import eu.scapeproject.pt.auth.EsciDocAuthentication;
+import eu.scapeproject.pt.auth.IAuthentication;
 
 
 public class LifecycleRunnable implements Runnable {
@@ -19,6 +22,7 @@ public class LifecycleRunnable implements Runnable {
 	private LoaderApplication loaderapp; 
 	private LoaderDao loaderDao;
 	static final boolean DONT_INTERRUPT_IF_RUNNING = true; 
+
 	
 	private static Logger logger =  Logger.getLogger(LifecycleRunnable.class.getName());
 	
@@ -26,6 +30,7 @@ public class LifecycleRunnable implements Runnable {
 		this.executor = executor;
 		this.loaderapp = loaderapp; 
 		this.loaderDao = new LoaderDao();
+		
 	}
 	
 	
@@ -38,7 +43,7 @@ public class LifecycleRunnable implements Runnable {
 				
 				for (Sip sip : q) {
 					String id = URLEncoder.encode(sip.getSipId().trim(), "UTF-8");
-					String state = loaderapp.getSipLifeCycle(id);
+					String state = loaderapp.getSipLifeCycle(sip.getSipId());
 					if(logger.isDebugEnabled()) {
 						logger.debug(sip.toString());
 					}
@@ -47,7 +52,8 @@ public class LifecycleRunnable implements Runnable {
 					} else if (state.equals(STATE.INGESTED.name())) { 
 						sip.setState(STATE.INGESTED);
 					} else if (state.equals(STATE.FAILED.name())) {
-						sip.setState(STATE.FAILED);
+						// do nothing
+						//sip.setState(STATE.FAILED);
 					}
 					
 					loaderDao.updateSip(sip);

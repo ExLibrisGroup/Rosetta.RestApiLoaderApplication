@@ -12,6 +12,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.ParseException;
 
+import eu.scapeproject.Sip.STATE;
 import eu.scapeproject.pt.main.Options;
 import eu.scapeproject.pt.threads.LifecycleRunnable;
 import eu.scapeproject.pt.threads.StopLifecycelTask;
@@ -22,9 +23,8 @@ import org.apache.log4j.PropertyConfigurator;
 
 
 import eu.scapeproject.LoaderApplication;
-import eu.scapeproject.LoaderDao;
 import eu.scapeproject.Sip;
-import eu.scapeproject.Sip.STATE;
+
 
 /**
  * * Utility command line application for the SCAPE Loader Application.
@@ -50,7 +50,7 @@ public class Loader {
 		CommandLine cmd = cmdParser.parse(Options.OPTIONS, args);
 		Configuration conf = new Configuration();
 		PropertyConfigurator.configure("log4j.properties");
-		
+		boolean async = true; 
 		if ((args.length == 0) || (cmd.hasOption(Options.HELP_OPT))) {
             Options.exit("Usage", 0);
         } else {
@@ -71,20 +71,32 @@ public class Loader {
 				// ingest
 				loaderapp.ingestIEs();	
 				
-				// retrieve lifecycle state as a scheduled task
-				logger.info("Retrieve Lifecycle states every 5 seconds - shutdown after 30 seconds");
-				ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-				Runnable worker = new LifecycleRunnable(scheduler, loaderapp);
-				long initialDelay = 10;
-				long period = 10;
-				ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(worker, initialDelay, period, TimeUnit.SECONDS);
-
-				// this is just a mad shutdown thread after 30 seconds - nothing real 
-				// condition should be: all objects are ingested @TODO
-				long  shutdownAfter = 60;
-				Runnable stopLCCheck = new StopLifecycelTask(future, scheduler, loaderapp);
-				ScheduledFuture<?> stopFuture = scheduler.schedule(stopLCCheck, shutdownAfter, TimeUnit.SECONDS);
-		        logger.info("stop Lifecycle task after: " + shutdownAfter + " seconds " + stopFuture.get());
+				if (async) { 
+					
+					// retrieve lifecycle state as a scheduled task
+					logger.info("Retrieve Lifecycle states every 5 seconds - shutdown after 30 seconds");
+					ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+					Runnable worker = new LifecycleRunnable(scheduler, loaderapp);
+					long initialDelay = 10;
+					long period = 10;
+					ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(worker, initialDelay, period, TimeUnit.SECONDS);
+	
+					// this is just a shutdown thread after 30 seconds - nothing real 
+					// condition should be: all objects are ingested @TODO
+					long  shutdownAfter = 60;
+					Runnable stopLCCheck = new StopLifecycelTask(future, scheduler, loaderapp);
+					ScheduledFuture<?> stopFuture = scheduler.schedule(stopLCCheck, shutdownAfter, TimeUnit.SECONDS);
+			        logger.info("stop Lifecycle task after: " + shutdownAfter + " seconds " + stopFuture.get());
+			        
+				} else { 
+					
+					Deque<Sip> q = loaderapp.getSipsByState(STATE.SUBMITTED_TO_REPOSITORY);
+					for (Sip sip : q) {
+						//String id = URLEncoder.encode(sip.getSipId().trim(), "UTF-8");
+						String id = sip.getSipId().trim();
+						loaderapp.getSipLifeCycle(id);
+					}
+				}
 
 			} else {
 				System.out.println("Empty directory. No SIPs to process");
