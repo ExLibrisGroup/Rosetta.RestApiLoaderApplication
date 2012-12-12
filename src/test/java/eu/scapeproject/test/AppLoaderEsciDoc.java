@@ -11,7 +11,7 @@ public class AppLoaderEsciDoc {
 	@Test
 	public void load() { 
 		
-		String[] args = {"-d /tmp/escidoc", "-u http://localhost:8080", "-i scape/entity-async", "-l scape/lifecycle"};
+		String[] args = {"-d /tmp/escidoc", "-u http://localhost:8080", "-i scape/entity", "-l scape/lifecycle", "-m true"};
 		try {
 			Loader.main(args);
 		} catch (ParseException e) {

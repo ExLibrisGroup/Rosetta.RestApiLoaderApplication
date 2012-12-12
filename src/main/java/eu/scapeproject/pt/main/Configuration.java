@@ -11,7 +11,14 @@ public class Configuration {
 	private String url;
 	private String ingest;
 	private String lifecycle;
+	private Boolean mode;
 	
+	public Boolean getMode() {
+		return mode;
+	}
+	public void setMode(Boolean mode) {
+		this.mode = mode;
+	}
 	public String getDir() {
 		return dir.trim();
 	}

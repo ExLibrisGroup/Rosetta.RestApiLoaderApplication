@@ -50,7 +50,7 @@ public class Loader {
 		CommandLine cmd = cmdParser.parse(Options.OPTIONS, args);
 		Configuration conf = new Configuration();
 		PropertyConfigurator.configure("log4j.properties");
-		boolean async = true; 
+		
 		if ((args.length == 0) || (cmd.hasOption(Options.HELP_OPT))) {
             Options.exit("Usage", 0);
         } else {
@@ -71,19 +71,20 @@ public class Loader {
 				// ingest
 				loaderapp.ingestIEs();	
 				
-				if (async) { 
+				if (conf.getMode()) { 
 					
 					// retrieve lifecycle state as a scheduled task
-					logger.info("Retrieve Lifecycle states every 5 seconds - shutdown after 30 seconds");
+					logger.info("Retrieve Lifecycle states every " + 2*files.length + " seconds - shutdown after " + 5*files.length + " seconds");
 					ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 					Runnable worker = new LifecycleRunnable(scheduler, loaderapp);
 					long initialDelay = 10;
-					long period = 10;
+					// the period depends on the number of objects.
+					long period = 2*files.length;
 					ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(worker, initialDelay, period, TimeUnit.SECONDS);
 	
-					// this is just a shutdown thread after 30 seconds - nothing real 
+					// this is just a shutdown thread after 60 seconds - nothing real 
 					// condition should be: all objects are ingested @TODO
-					long  shutdownAfter = 60;
+					long  shutdownAfter = 5*files.length;
 					Runnable stopLCCheck = new StopLifecycelTask(future, scheduler, loaderapp);
 					ScheduledFuture<?> stopFuture = scheduler.schedule(stopLCCheck, shutdownAfter, TimeUnit.SECONDS);
 			        logger.info("stop Lifecycle task after: " + shutdownAfter + " seconds " + stopFuture.get());
