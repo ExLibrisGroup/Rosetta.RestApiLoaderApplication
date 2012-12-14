@@ -210,7 +210,7 @@ public class LoaderApplication {
      * @return
      */
     private String extractLifecyclestate(String response) { 
-    	Pattern pattern = Pattern.compile("lifecyclestate=.*\""); 
+    	Pattern pattern = Pattern.compile("lifecyclestate=.*\"/>"); 
 		Matcher matcher = pattern.matcher(response);
 		String result = STATE.SUBMITTED_TO_REPOSITORY.name(); 
 		while (matcher.find()) { 
