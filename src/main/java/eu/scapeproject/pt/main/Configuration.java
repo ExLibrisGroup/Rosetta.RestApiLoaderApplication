@@ -11,13 +11,13 @@ public class Configuration {
 	private String url;
 	private String ingest;
 	private String lifecycle;
-	private Boolean mode;
-	
-	public Boolean getMode() {
-		return mode;
+	private String period;
+
+	public String getPeriod() {
+		return period.trim();
 	}
-	public void setMode(Boolean mode) {
-		this.mode = mode;
+	public void setPeriod(String period) {
+		this.period = period.trim();
 	}
 	public String getDir() {
 		return dir.trim();

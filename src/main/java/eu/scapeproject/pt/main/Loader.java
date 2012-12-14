@@ -3,6 +3,7 @@ package eu.scapeproject.pt.main;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.Deque;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -13,6 +14,8 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.ParseException;
 
 import eu.scapeproject.Sip.STATE;
+import eu.scapeproject.pt.auth.EsciDocAuthentication;
+import eu.scapeproject.pt.auth.IAuthentication;
 import eu.scapeproject.pt.main.Options;
 import eu.scapeproject.pt.threads.LifecycleRunnable;
 import eu.scapeproject.pt.threads.StopLifecycelTask;
@@ -36,6 +39,7 @@ import eu.scapeproject.Sip;
  * -h,--help          print this message.
  * -i,--ingest  <arg>      ingest REST endpoint [default: entity-async] (Optional).
  * -l,--lifecycle <arg>    lifecycle REST endpoint [default: lifecycle] (Optional).
+ * -p,--period <arg>    Period to fetch lifecycle states [default: 1 min].
  *                    
  * @author mhn
  *
@@ -43,7 +47,8 @@ import eu.scapeproject.Sip;
 public class Loader {
 	
 	private static Logger logger =  Logger.getLogger(Loader.class.getName());
-
+	
+	
 	public static void main(String[] args) throws ParseException {
 		
 		CommandLineParser cmdParser = new PosixParser();
@@ -57,47 +62,27 @@ public class Loader {
             Options.initOptions(cmd, conf);
 		
 		try {
-			LoaderApplication loaderapp = new LoaderApplication(conf);
+			LoaderApplication loaderapp = new LoaderApplication(conf, new EsciDocAuthentication());
 			loaderapp.cleanQueue();
 			
 			// fetch sips from directory
 			LoaderIO io = new LoaderIO(); 
 			String[] files = io.getFiles(conf.getDir());
-			if (files != null  && files.length > 0) { 
+			if (files != null  && files.length > 0) {
+				
 				for (int i = 0; i < files.length; i++) {
 					loaderapp.enqueuSip(URI.create("file:" + conf.getDir() +  files[i]));
 				}
 				
 				// ingest
 				loaderapp.ingestIEs();	
-				
-				if (conf.getMode()) { 
 					
-					// retrieve lifecycle state as a scheduled task
-					logger.info("Retrieve Lifecycle states every " + 2*files.length + " seconds - shutdown after " + 5*files.length + " seconds");
-					ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-					Runnable worker = new LifecycleRunnable(scheduler, loaderapp);
-					long initialDelay = 10;
-					// the period depends on the number of objects.
-					long period = 2*files.length;
-					ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(worker, initialDelay, period, TimeUnit.SECONDS);
-	
-					// this is just a shutdown thread after 60 seconds - nothing real 
-					// condition should be: all objects are ingested @TODO
-					long  shutdownAfter = 5*files.length;
-					Runnable stopLCCheck = new StopLifecycelTask(future, scheduler, loaderapp);
-					ScheduledFuture<?> stopFuture = scheduler.schedule(stopLCCheck, shutdownAfter, TimeUnit.SECONDS);
-			        logger.info("stop Lifecycle task after: " + shutdownAfter + " seconds " + stopFuture.get());
-			        
-				} else { 
-					
-					Deque<Sip> q = loaderapp.getSipsByState(STATE.SUBMITTED_TO_REPOSITORY);
-					for (Sip sip : q) {
-						//String id = URLEncoder.encode(sip.getSipId().trim(), "UTF-8");
-						String id = sip.getSipId().trim();
-						loaderapp.getSipLifeCycle(id);
-					}
-				}
+				// retrieve lifecycle state as a scheduled task
+				logger.info("Retrieve Lifecycle states after " + conf.getPeriod() + " minutes - please be patient.");
+				ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+				// the period depends on the number of objects.
+				ScheduledFuture<?> future = scheduler.schedule(new LifecycleRunnable(scheduler, loaderapp), Integer.parseInt(conf.getPeriod()), TimeUnit.MINUTES);
+				future.get();
 
 			} else {
 				System.out.println("Empty directory. No SIPs to process");

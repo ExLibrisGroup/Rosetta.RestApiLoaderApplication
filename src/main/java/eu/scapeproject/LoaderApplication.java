@@ -40,6 +40,7 @@ public class LoaderApplication {
     private LoaderDao loaderDao;
     private Configuration conf;
     private DefaultHttpClient httpclient;
+    private IAuthentication auth;
     
     private static Logger logger =  Logger.getLogger(LoaderApplication.class.getName());
 
@@ -55,14 +56,23 @@ public class LoaderApplication {
     	this.sipQueue = new LinkedList<Sip>();
     }
     
+    public LoaderApplication(Configuration conf, IAuthentication auth) throws Exception { 
+    	loaderDao = new LoaderDao();
+    	this.repoURI = new URI(conf.getUrl());
+    	this.sipQueue = new LinkedList<Sip>();
+    	this.conf = conf;
+    	this.auth = auth;
+    	this.httpclient = auth.logon();
+    }
+    
     public LoaderApplication(Configuration conf) throws Exception { 
     	loaderDao = new LoaderDao();
     	this.repoURI = new URI(conf.getUrl());
     	this.sipQueue = new LinkedList<Sip>();
     	this.conf = conf;
-    	IAuthentication auth = new EsciDocAuthentication();
     	this.httpclient = auth.logon();
     }
+
 
     /**
      * Add a sip to the ingest queue
@@ -200,9 +210,9 @@ public class LoaderApplication {
      * @return
      */
     private String extractLifecyclestate(String response) { 
-    	Pattern pattern = Pattern.compile("lifecyclestate=.*\"/>"); 
+    	Pattern pattern = Pattern.compile("lifecyclestate=.*\""); 
 		Matcher matcher = pattern.matcher(response);
-		String result = "FAILED"; 
+		String result = STATE.SUBMITTED_TO_REPOSITORY.name(); 
 		while (matcher.find()) { 
 		     String[] x = matcher.group().split("=");
 		     if(x.length > 1) {

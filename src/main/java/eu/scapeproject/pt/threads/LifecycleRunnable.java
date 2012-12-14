@@ -2,6 +2,7 @@ package eu.scapeproject.pt.threads;
 
 import java.net.URLEncoder;
 import java.util.Deque;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 
@@ -52,8 +53,7 @@ public class LifecycleRunnable implements Runnable {
 					} else if (state.equals(STATE.INGESTED.name())) { 
 						sip.setState(STATE.INGESTED);
 					} else if (state.equals(STATE.FAILED.name())) {
-						// do nothing
-						//sip.setState(STATE.FAILED);
+						sip.setState(STATE.FAILED);
 					}
 					
 					loaderDao.updateSip(sip);
@@ -61,13 +61,16 @@ public class LifecycleRunnable implements Runnable {
 				
 				logger.info("Retrieval of Lifecycle objects " + q.size());
 				
-				if (q.size() == 0) { 
-					executor.shutdown();
-				}
 				
 		    } catch (Exception e) { 
 		    	e.printStackTrace();
+		    	executor.shutdownNow();
 		    }
+		    
+		    
+			
+		    
+		   
 
 	}
 

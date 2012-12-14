@@ -39,10 +39,9 @@ public class Options  {
 	    public static final String LIFECYCLE_OPT = "lifecycle";
 	    public static final String LIFECYCLE_OPT_DESC = "lifecycle REST endpoint [default: lifecycle].";
 	    
-	    public static final String MODE_FLG = "m";
-	    public static final String MODE_OPT = "mode";
-	    public static final String MODE_OPT_DESC = "asynchronous (true) or synchronous (false) mode [default: true].";
-	    
+	    public static final String PERIOD_FLG = "p";
+	    public static final String PERIOD_OPT = "period";
+	    public static final String PERIOD_OPT_DESC = "Period in min to fetch lifecycle states [default: 100 sec].";
 	    
 	    // Static for command line option parsing
 	    public static org.apache.commons.cli.Options OPTIONS = new org.apache.commons.cli.Options();
@@ -54,7 +53,7 @@ public class Options  {
 	        OPTIONS.addOption(URL_FLG, URL_OPT, true, URL_OPT_DESC);
 	        OPTIONS.addOption(INGEST_FLG, INGEST_OPT, true, INGEST_OPT_DESC);
 	        OPTIONS.addOption(LIFECYCLE_FLG, LIFECYCLE_OPT, true, LIFECYCLE_OPT_DESC);
-	        OPTIONS.addOption(MODE_FLG, MODE_OPT, true, MODE_OPT_DESC);
+	        OPTIONS.addOption(PERIOD_FLG, PERIOD_OPT, true, PERIOD_OPT_DESC);
 	    }
 	    
 	    
@@ -64,7 +63,7 @@ public class Options  {
 	        String urlStr;
 	        String ingestStr;
 	        String lifecycleStr;
-	        String modeStr;
+	        String periodStr;
 	        
 
 	        // dirs
@@ -102,17 +101,14 @@ public class Options  {
 	            logger.info("LIFECYCLE REST end point: " + lifecycleStr);
 	        }
 	        
-	        if (!(cmd.hasOption(MODE_OPT) && cmd.getOptionValue(MODE_OPT) != null)) {
-	        	conf.setMode(true);
+	        if (!(cmd.hasOption(PERIOD_OPT) && cmd.getOptionValue(PERIOD_OPT) != null)) {
+	        	conf.setPeriod("100");
 	        } else {
-	            modeStr = cmd.getOptionValue(MODE_OPT).trim();
-	            conf.setMode(false);
-	            if (modeStr.equalsIgnoreCase("true")) { 
-	            	conf.setMode(Boolean.valueOf(modeStr.toLowerCase()));
-	            } 
-	            
-	            logger.info("Mode of Ingest (async [true] / sync [false]): " + Boolean.valueOf(modeStr.toLowerCase()).toString());
+	            periodStr = cmd.getOptionValue(PERIOD_OPT);
+	            conf.setPeriod(periodStr);
+	            logger.info("Period in min to fetch lifecycle states: " + periodStr);
 	        }
+	        
 
 	    }
 	    
