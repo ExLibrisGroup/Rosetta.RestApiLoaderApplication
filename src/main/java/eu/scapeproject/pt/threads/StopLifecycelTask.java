@@ -38,7 +38,7 @@ public class StopLifecycelTask implements Runnable {
 			if(q.size() == 0 || q.isEmpty()) { 
 			 stopFuture.cancel(DONT_INTERRUPT_IF_RUNNING);
 		     executor.shutdown();
-			}
+			} 
 		      
 		} catch (SQLException e) {
 			e.printStackTrace();

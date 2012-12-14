@@ -81,9 +81,11 @@ public class Loader {
 				logger.info("Retrieve Lifecycle states after " + conf.getPeriod() + " minutes - please be patient.");
 				ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 				// the period depends on the number of objects.
-				ScheduledFuture<?> future = scheduler.schedule(new LifecycleRunnable(scheduler, loaderapp), Integer.parseInt(conf.getPeriod()), TimeUnit.MINUTES);
-				future.get();
-
+				ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(new LifecycleRunnable(scheduler, loaderapp), Integer.parseInt(conf.getPeriod()),Integer.parseInt(conf.getPeriod()), TimeUnit.MINUTES);
+				//future.get();
+				
+				ScheduledFuture<?> stop = scheduler.schedule(new StopLifecycelTask(future,scheduler,loaderapp), 2*Integer.parseInt(conf.getPeriod()), TimeUnit.MINUTES);
+				stop.get();
 			} else {
 				System.out.println("Empty directory. No SIPs to process");
 			}
