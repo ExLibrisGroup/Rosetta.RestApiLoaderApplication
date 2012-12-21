@@ -163,8 +163,9 @@ public class LoaderApplication {
     	}
 		
     	String out = extractLifecyclestate(IOUtils.toString(resp.getEntity().getContent()));
-    	logger.info("ID: " + entityId + " STATUS: " + out + "  RETURN CODE: " + resp.getStatusLine().getStatusCode() + " " + resp.getStatusLine().getReasonPhrase());
-    	
+    	if (logger.isDebugEnabled()) {
+    		logger.debug("ID: " + entityId + " STATUS: " + out + "  RETURN CODE: " + resp.getStatusLine().getStatusCode() + " " + resp.getStatusLine().getReasonPhrase());
+    	}
     	get.releaseConnection();
     	return out;
     }

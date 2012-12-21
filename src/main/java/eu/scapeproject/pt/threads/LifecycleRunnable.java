@@ -22,15 +22,17 @@ public class LifecycleRunnable implements Runnable {
 	private ScheduledExecutorService executor; 
 	private LoaderApplication loaderapp; 
 	private LoaderDao loaderDao;
+	private String period;  
 	static final boolean DONT_INTERRUPT_IF_RUNNING = true; 
 
 	
 	private static Logger logger =  Logger.getLogger(LifecycleRunnable.class.getName());
 	
-	public LifecycleRunnable(ScheduledExecutorService executor, LoaderApplication loaderapp) throws Exception {
+	public LifecycleRunnable(ScheduledExecutorService executor, LoaderApplication loaderapp, String period) throws Exception {
 		this.executor = executor;
 		this.loaderapp = loaderapp; 
 		this.loaderDao = new LoaderDao();
+		this.period = period;
 		
 	}
 	
@@ -44,7 +46,7 @@ public class LifecycleRunnable implements Runnable {
 				
 				for (Sip sip : q) {
 					String id = URLEncoder.encode(sip.getSipId().trim(), "UTF-8");
-					String state = loaderapp.getSipLifeCycle(sip.getSipId());
+					String state = loaderapp.getSipLifeCycle(id);
 					if(logger.isDebugEnabled()) {
 						logger.debug(sip.toString());
 					}
@@ -54,12 +56,67 @@ public class LifecycleRunnable implements Runnable {
 						sip.setState(STATE.INGESTED);
 					} else if (state.equals(STATE.FAILED.name())) {
 						sip.setState(STATE.FAILED);
+					} else if (state.equals(STATE.IN_PROGRESS.name())) {
+						sip.setState(STATE.IN_PROGRESS);
+					} else if (state.equals(STATE.PENDING.name())) {
+						sip.setState(STATE.PENDING);
 					}
 					
 					loaderDao.updateSip(sip);
 				}
 				
-				logger.info("Retrieval of Lifecycle objects " + q.size());
+				// Report Generation
+				Deque<Sip> submitted = loaderapp.getSipsByState(STATE.SUBMITTED_TO_REPOSITORY);
+				Deque<Sip> ingested = loaderapp.getSipsByState(STATE.INGESTED);
+				Deque<Sip> ingesting = loaderapp.getSipsByState(STATE.INGESTING);
+				Deque<Sip> failed = loaderapp.getSipsByState(STATE.FAILED);
+				Deque<Sip> inprogress = loaderapp.getSipsByState(STATE.IN_PROGRESS);
+				Deque<Sip> pending = loaderapp.getSipsByState(STATE.PENDING);
+
+				logger.info("Sumbitted SIPs: " + submitted.size());
+				logger.info("Ingested SIPs: " + ingested.size());
+				logger.info("failed SIPs: " + failed.size());
+				logger.info("inprogress SIPs: " + inprogress.size());
+				logger.info("pending SIPs: " + pending.size());
+				logger.info("Next retrieve of lifecycle states after " + period + " minutes - please be patient.");
+				
+				if (logger.isDebugEnabled()) {
+					if (submitted.size() > 0) {
+						logger.debug("Listing of submitted SIPs");
+						for (Sip sip : submitted) {
+							logger.debug("\t SUBMITTED "+ sip.getSipId());
+						}
+					}
+					
+					if (ingested.size() > 0) {
+						logger.debug("Listing of ingested SIPs");
+						for (Sip sip : ingested) {
+							logger.debug("\t INGESTED "+ sip.getSipId());
+						}
+					}
+					
+					if (failed.size() > 0) {
+						logger.debug("Listing of failed SIPs");
+						for (Sip sip : failed) {
+							logger.debug("\t FAILED "+ sip.getSipId());
+						}
+					}
+					
+					if (inprogress.size() > 0) {
+						logger.debug("Listing of in_progress SIPs");
+						for (Sip sip : inprogress) {
+							logger.debug("\t IN PROGRESS "+ sip.getSipId());
+						}
+					}
+					
+					if (pending.size() > 0) {
+						logger.debug("Listing of pending SIPs");
+						for (Sip sip : pending) {
+							logger.debug("\t PENDING "+ sip.getSipId());
+						}
+					}
+				}
+				
 				
 				
 		    } catch (Exception e) { 

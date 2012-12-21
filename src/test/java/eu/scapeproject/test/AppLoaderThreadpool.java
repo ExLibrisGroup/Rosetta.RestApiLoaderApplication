@@ -93,7 +93,7 @@ public class AppLoaderThreadpool {
 		
 		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	
-		Runnable worker = new LifecycleRunnable(scheduler, loaderApplication);
+		Runnable worker = new LifecycleRunnable(scheduler, loaderApplication, "10");
 		// über command line interface konfigurierbar machen
 		long initialDelay = 10;
 		long period = 5;
