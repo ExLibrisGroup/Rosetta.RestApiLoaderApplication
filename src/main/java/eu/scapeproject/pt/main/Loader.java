@@ -78,7 +78,7 @@ public class Loader {
 				loaderapp.ingestIEs();	
 					
 				// retrieve lifecycle state as a scheduled task
-				logger.info("Retrieve lifecycle states after " + conf.getPeriod() + " minutes - please be patient.");
+				logger.info("Retrieve lifecycle states in " + conf.getPeriod() + " minutes - please be patient.");
 				logger.info("System will be shutdown automatically after " + 10*Integer.parseInt(conf.getPeriod()) + " minutes.");
 				ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 				// the period depends on the number of objects.
