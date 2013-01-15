@@ -1,0 +1,22 @@
+SCAPE Loader Application
+===========================
+
+This is the Loader Application for SCAPE repositories. 
+The project depends on https://github.com/fasseg/scape-tck
+
+The usage of the application is via command line
+
+usage: java -jar loader-app-0.0.1-SNAPSHOT-jar-with-dependencies.jar [-d
+       <arg>] [-h] [-i <arg>] [-l <arg>] [-p <arg>] [-u <arg>]
+ -d,--dir <arg>         Local input directory (Required)
+ -h,--help              print this message.
+ -i,--ingest <arg>      ingest REST endpoint [default: entity-async].
+ -l,--lifecycle <arg>   lifecycle REST endpoint [default: lifecycle].
+ -p,--period <arg>      Period in min to fetch lifecycle states [default:
+                        100 sec].
+ -u,--url <arg>         base URL of the repository (Required).
+ 
+To use the Loader Application with your Repository you must provide an
+implementation of the IAuthentication interface. An example impl with escidoc
+is called EsciDocAuthentication. Please refere to the Loader.java class for further usage.
+LoaderApplication loaderapp = new LoaderApplication(conf, new EsciDocAuthentication());
