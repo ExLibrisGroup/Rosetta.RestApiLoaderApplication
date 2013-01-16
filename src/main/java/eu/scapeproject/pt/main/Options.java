@@ -27,7 +27,7 @@ public class Options  {
 	    public static final String DIR_OPT = "dir";
 	    public static final String DIR_OPT_DESC = "Local input directory (Required)";
 	    
-	    public static final String URL_FLG = "u";
+	    public static final String URL_FLG = "r";
 	    public static final String URL_OPT = "url";
 	    public static final String URL_OPT_DESC = "base URL of the repository (Required).";
 	    
@@ -39,9 +39,17 @@ public class Options  {
 	    public static final String LIFECYCLE_OPT = "lifecycle";
 	    public static final String LIFECYCLE_OPT_DESC = "lifecycle REST endpoint [default: lifecycle].";
 	    
-	    public static final String PERIOD_FLG = "p";
+	    public static final String PERIOD_FLG = "t";
 	    public static final String PERIOD_OPT = "period";
-	    public static final String PERIOD_OPT_DESC = "Period in min to fetch lifecycle states [default: 100 sec].";
+	    public static final String PERIOD_OPT_DESC = "Period in min to fetch lifecycle states [default: 100 min].";
+	    
+	    public static final String USER_FLG = "u";
+	    public static final String USER_OPT = "username";
+	    public static final String USER_OPT_DESC = "username of the repository user.";
+	    
+	    public static final String PASSWORD_FLG = "p";
+	    public static final String PASSWORD_OPT = "password";
+	    public static final String PASSWORD_OPT_DESC = "password of the repository user.";
 	    
 	    // Static for command line option parsing
 	    public static org.apache.commons.cli.Options OPTIONS = new org.apache.commons.cli.Options();
@@ -54,6 +62,8 @@ public class Options  {
 	        OPTIONS.addOption(INGEST_FLG, INGEST_OPT, true, INGEST_OPT_DESC);
 	        OPTIONS.addOption(LIFECYCLE_FLG, LIFECYCLE_OPT, true, LIFECYCLE_OPT_DESC);
 	        OPTIONS.addOption(PERIOD_FLG, PERIOD_OPT, true, PERIOD_OPT_DESC);
+	        OPTIONS.addOption(USER_FLG, USER_OPT, true, USER_OPT_DESC);
+	        OPTIONS.addOption(PASSWORD_FLG, PASSWORD_OPT, true, PASSWORD_OPT_DESC);
 	    }
 	    
 	    
@@ -64,7 +74,8 @@ public class Options  {
 	        String ingestStr;
 	        String lifecycleStr;
 	        String periodStr;
-	        
+	        String usernameStr;
+	        String passwordStr;
 
 	        // dirs
 	        if (!(cmd.hasOption(DIR_OPT) && cmd.getOptionValue(DIR_OPT) != null)) {
@@ -107,6 +118,22 @@ public class Options  {
 	            periodStr = cmd.getOptionValue(PERIOD_OPT);
 	            conf.setPeriod(periodStr);
 	            logger.info("Period in min to fetch lifecycle states: " + periodStr);
+	        }
+	        
+	        if (!(cmd.hasOption(USER_OPT) && cmd.getOptionValue(USER_OPT) != null)) {
+	        	exit("No username given.", 1);
+	        } else {
+	            usernameStr = cmd.getOptionValue(USER_OPT);
+	            conf.setUser(usernameStr);
+	            logger.info("username: " + usernameStr);
+	        }
+	        
+	        if (!(cmd.hasOption(PASSWORD_OPT) && cmd.getOptionValue(PASSWORD_OPT) != null)) {
+	        	exit("No password given.", 1);
+	        } else {
+	            passwordStr = cmd.getOptionValue(PASSWORD_OPT);
+	            conf.setPassword(passwordStr);
+	            logger.info("password: " + passwordStr);
 	        }
 	        
 

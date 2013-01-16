@@ -12,6 +12,8 @@ public class Configuration {
 	private String ingest;
 	private String lifecycle;
 	private String period;
+	private String user; 
+	private String password;
 
 	public String getPeriod() {
 		return period.trim();
@@ -45,6 +47,18 @@ public class Configuration {
 	}
 	public void setLifecycle(String lifecycle) {
 		this.lifecycle = lifecycle;
+	}
+	public String getUser() {
+		return user.trim();
+	}
+	public void setUser(String user) {
+		this.user = user;
+	}
+	public String getPassword() {
+		return password.trim();
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	} 
 	
 	

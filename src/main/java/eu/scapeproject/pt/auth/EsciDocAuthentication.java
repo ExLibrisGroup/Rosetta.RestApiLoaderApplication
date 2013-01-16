@@ -18,19 +18,22 @@ import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import eu.scapeproject.pt.main.Configuration;
+
 public final class EsciDocAuthentication implements IAuthentication {
 	
 	private static final DefaultHttpClient httpclient = new DefaultHttpClient();
-
+	private Configuration conf;
 	
-	public EsciDocAuthentication() { 
+	public EsciDocAuthentication(Configuration conf) { 
 		httpclient.setRedirectStrategy(new DefaultRedirectStrategy());
+		this.conf = conf;
 	}
 	
 	
 	@Override
 	public DefaultHttpClient logon() {
-		HttpGet httpget = new HttpGet("http://localhost:8080/aa/login/login.html");
+		HttpGet httpget = new HttpGet(conf.getUrl()+"/aa/login/login.html");
         HttpResponse response;
 		try {
 			response = httpclient.execute(httpget);
@@ -44,19 +47,19 @@ public final class EsciDocAuthentication implements IAuthentication {
 			e.printStackTrace();
 		}
 		
-		 HttpPost httppost = new HttpPost("http://localhost:8080/aa/j_spring_security_check");
-         httppost.setHeader("Referer", "http://localhost:8080/aa/login/login.html");
+		 HttpPost httppost = new HttpPost(conf.getUrl()+"/aa/j_spring_security_check");
+         httppost.setHeader("Referer", conf.getUrl()+"/aa/login/login.html");
          httppost.setHeader("Connection", "keep-alive");
          httppost.getParams().setParameter("http.protocol.handle-redirects",true);
              
          List <NameValuePair> nvps = new ArrayList <NameValuePair>();
-         nvps.add(new BasicNameValuePair("j_username", "sysadmin"));
-         nvps.add(new BasicNameValuePair("j_password", "esciDoc"));
+         nvps.add(new BasicNameValuePair("j_username", conf.getUser()));
+         nvps.add(new BasicNameValuePair("j_password", conf.getPassword()));
          nvps.add(new BasicNameValuePair("Abschicken", "submit"));
 
          try {
 			httppost.setEntity(new UrlEncodedFormEntity(nvps, "iso-8859-1"));
-			HttpHost target = new HttpHost("localhost",8080); 
+			HttpHost target = new HttpHost(getDomain(conf.getUrl()),getPort(conf.getUrl())); 
 	        HttpResponse postresponse = httpclient.execute(target,httppost);
 	        HttpEntity entity2 = postresponse.getEntity();
 	        EntityUtils.consume(entity2);
@@ -65,7 +68,7 @@ public final class EsciDocAuthentication implements IAuthentication {
 	        httppost.releaseConnection();    
 	        
 	        //needed to set ESCIDOC cookie
-            HttpGet get2 = new HttpGet("http://localhost:8080/aa/login?target=http://localhost:8080/AdminTool/");
+            HttpGet get2 = new HttpGet(conf.getUrl()+"/aa/login?target="+conf.getUrl()+"/AdminTool/");
 	        HttpResponse response2 = httpclient.execute(get2);   
 	        get2.releaseConnection();
 	        
@@ -80,6 +83,20 @@ public final class EsciDocAuthentication implements IAuthentication {
        
        return httpclient;
 
+	}
+	
+	
+	private Integer getPort(String url) { 
+		String[] _port = url.split(":");
+		System.out.println(_port[2]);
+		return Integer.parseInt(_port[2]);	
+	}
+	
+	private String getDomain(String url) { 
+		String[] _port = url.split(":");
+		String domain = _port[1].substring(2);
+		System.out.println(domain);
+		return domain;	
 	}
 
 }
