@@ -78,15 +78,18 @@ public class Loader {
 				loaderapp.ingestIEs();	
 					
 				// retrieve lifecycle state as a scheduled task
-				logger.info("Retrieve lifecycle states in " + conf.getPeriod() + " minutes - please be patient.");
-				logger.info("System will be shutdown automatically after " + 10*Integer.parseInt(conf.getPeriod()) + " minutes.");
-				ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-				// the period depends on the number of objects.
-				ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(new LifecycleRunnable(scheduler, loaderapp, conf.getPeriod()), Integer.parseInt(conf.getPeriod()),Integer.parseInt(conf.getPeriod()), TimeUnit.MINUTES);
-				future.get();
+				if (conf.getChecklifecycle()=="true") {
+				  logger.info("Retrieve lifecycle states in " + conf.getPeriod() + " minutes - please be patient.");
+				  logger.info("System will be shutdown automatically after " + 10*Integer.parseInt(conf.getPeriod()) + " minutes.");
+
+					ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+					// the period depends on the number of objects.
+					ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(new LifecycleRunnable(scheduler, loaderapp, conf.getPeriod()), Integer.parseInt(conf.getPeriod()),Integer.parseInt(conf.getPeriod()), TimeUnit.MINUTES);
+					future.get();
 				
-				ScheduledFuture<?> stop = scheduler.schedule(new StopLifecycelTask(future,scheduler,loaderapp), 10*Integer.parseInt(conf.getPeriod()), TimeUnit.MINUTES);
-				stop.get();
+					ScheduledFuture<?> stop = scheduler.schedule(new StopLifecycelTask(future,scheduler,loaderapp), 10*Integer.parseInt(conf.getPeriod()), TimeUnit.MINUTES);
+					stop.get();
+				}
 			} else {
 				System.out.println("Empty directory. No SIPs to process");
 			}

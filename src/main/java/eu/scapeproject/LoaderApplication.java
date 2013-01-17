@@ -70,7 +70,7 @@ public class LoaderApplication {
     	this.repoURI = new URI(conf.getUrl());
     	this.sipQueue = new LinkedList<Sip>();
     	this.conf = conf;
-    	this.httpclient = auth.logon();
+    	this.httpclient= new DefaultHttpClient();
     }
 
 
@@ -112,13 +112,16 @@ public class LoaderApplication {
 				post.setEntity(byteArrayEntity);
 				
 				// make sure you are logged in before execute the post! Need to define a DefaultHttpClient before
+				
 				HttpResponse resp = httpclient.execute(post);
+				
 				if (logger.isDebugEnabled()) {
 					List<Cookie> cookies = httpclient.getCookieStore().getCookies();
 					for (Cookie cookie : cookies) {
 						logger.debug(cookie.getName() + ".." + cookie.getValue());
 					}
 				}
+			
 				
 				sipId = extractSipId(IOUtils.toString(resp.getEntity().getContent()));
 				if (sipId != null) {

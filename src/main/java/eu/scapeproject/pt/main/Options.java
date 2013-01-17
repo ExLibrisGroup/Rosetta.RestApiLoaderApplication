@@ -51,6 +51,10 @@ public class Options  {
 	    public static final String PASSWORD_OPT = "password";
 	    public static final String PASSWORD_OPT_DESC = "password of the repository user.";
 	    
+	    public static final String CHECKLIFECYCLE_FLG = "c";
+	    public static final String CHECKLIFECYCLE_OPT = "checklifecycle";
+	    public static final String CHECKLIFECYCLE_OPT_DESC = "activate the periodic lifecycle retrieval. [default: true]";
+	    
 	    // Static for command line option parsing
 	    public static org.apache.commons.cli.Options OPTIONS = new org.apache.commons.cli.Options();
 	   
@@ -64,6 +68,7 @@ public class Options  {
 	        OPTIONS.addOption(PERIOD_FLG, PERIOD_OPT, true, PERIOD_OPT_DESC);
 	        OPTIONS.addOption(USER_FLG, USER_OPT, true, USER_OPT_DESC);
 	        OPTIONS.addOption(PASSWORD_FLG, PASSWORD_OPT, true, PASSWORD_OPT_DESC);
+	        OPTIONS.addOption(CHECKLIFECYCLE_FLG, CHECKLIFECYCLE_OPT, true, CHECKLIFECYCLE_OPT_DESC);
 	    }
 	    
 	    
@@ -76,6 +81,7 @@ public class Options  {
 	        String periodStr;
 	        String usernameStr;
 	        String passwordStr;
+	        String checklifecycleStr;
 
 	        // dirs
 	        if (!(cmd.hasOption(DIR_OPT) && cmd.getOptionValue(DIR_OPT) != null)) {
@@ -134,6 +140,15 @@ public class Options  {
 	            passwordStr = cmd.getOptionValue(PASSWORD_OPT);
 	            conf.setPassword(passwordStr);
 	            logger.info("password: " + passwordStr);
+	        }
+	        
+	        
+	        if (!(cmd.hasOption(CHECKLIFECYCLE_OPT) && cmd.getOptionValue(CHECKLIFECYCLE_OPT) != null)) {
+	        	conf.setChecklifecycle("true");
+	        } else {
+	        	checklifecycleStr = cmd.getOptionValue(CHECKLIFECYCLE_OPT);
+	            conf.setChecklifecycle(checklifecycleStr);
+	            logger.info("CHECKLIFECYCLE: " + checklifecycleStr);
 	        }
 	        
 

@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.util.Deque;
 
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -38,20 +39,20 @@ public class AppLoaderTCKTest {
 
     @BeforeClass
     public static void setup() throws Exception {
+    	PropertyConfigurator.configure("log4j.properties");
         Thread t = new Thread(MOCK);
         t.start();
         while (!MOCK.isRunning()) {
             Thread.sleep(10);
         }
-        
         conf = new Configuration(); 
         conf.setDir("sips/");
         conf.setUrl("http://localhost:8387");
         conf.setIngest("entity-async");
         conf.setLifecycle("lifecycle");
-        loaderApplication =  new LoaderApplication(conf);
+        loaderApplication = new LoaderApplication(conf);
         loaderApplication.cleanQueue();
-        PropertyConfigurator.configure("log4j.properties");
+        
     }
 
     @AfterClass
@@ -59,7 +60,6 @@ public class AppLoaderTCKTest {
         MOCK.stop();
         MOCK.close();
         assertFalse(MOCK.isRunning());
-        
         loaderApplication.shutdown();
     }
     
@@ -76,7 +76,7 @@ public class AppLoaderTCKTest {
 			loaderApplication.enqueuSip(URI.create("file:" + sipFileName));
 		}
 
-		loaderApplication.ingestIEs();
+	loaderApplication.ingestIEs();
     	
     }
     

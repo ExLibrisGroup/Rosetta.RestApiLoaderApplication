@@ -58,7 +58,7 @@ public class AppLoaderMainTest {
 	
 	@Test
 	public void testMain() {  
-		String[] args = {"-d /home/mhn/git/loader-app/sips", "-u http://localhost:8387"};
+		String[] args = {"-d sips", "-r http://localhost:8387", "-p esciDoc", "-u sysadmin", "-c false"};
 		try {
 			Loader.main(args);
 		} catch (ParseException e) {

@@ -14,7 +14,14 @@ public class Configuration {
 	private String period;
 	private String user; 
 	private String password;
+	private String checklifecycle;
 
+	public String getChecklifecycle() {
+		return checklifecycle.trim();
+	}
+	public void setChecklifecycle(String checklifecycle) {
+		this.checklifecycle = checklifecycle;
+	}
 	public String getPeriod() {
 		return period.trim();
 	}
