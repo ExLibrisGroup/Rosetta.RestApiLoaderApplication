@@ -99,7 +99,7 @@ public class LoaderIO {
 	public void cleandir() throws IOException { 
 		File sips = new File("sips/");
 		sips.mkdir();
-		FileUtils.cleanDirectory(new File("sips/"));
+		FileUtils.cleanDirectory(sips);
 	}
 
 }
