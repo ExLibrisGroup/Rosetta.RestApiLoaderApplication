@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 import org.apache.hadoop.conf.Configuration;
@@ -54,9 +56,8 @@ public class LoaderIO {
 	public void extractSeqFile(String pathToFile) throws IOException {
 		
 		Path seqFilePath = new Path(pathToFile);
-        Configuration conf = new Configuration();
-        FileSystem fs = FileSystem.get(conf);
-        SequenceFile.Reader reader = new SequenceFile.Reader(fs, seqFilePath , conf);
+		Map configuration = this.checkFS(pathToFile);
+        SequenceFile.Reader reader = new SequenceFile.Reader((FileSystem)configuration.get("fs"), seqFilePath , (Configuration)configuration.get("conf"));
         Text key = new Text();
         BytesWritable val = new BytesWritable();
         logger.info("Extract Sequence File:"); 
@@ -100,6 +101,33 @@ public class LoaderIO {
 		File sips = new File("sips/");
 		sips.mkdir();
 		FileUtils.cleanDirectory(sips);
+	}
+	
+	private Map checkFS(String pathtofile) throws IOException { 
+		
+		File file = new File(pathtofile); 
+		Configuration conf = new Configuration();
+		
+		// If file does not exists on local file system check if it lives on HDFS
+		String hadoop_home = ""; 
+		if (!file.exists()) { 
+			hadoop_home = System.getenv("HADOOP_HOME");
+			if (hadoop_home != null && hadoop_home.length() > 0 ) { 
+				conf.addResource(new Path(hadoop_home+"/conf/core-site.xml"));
+				conf.addResource(new Path(hadoop_home+"/conf/hdfs-site.xml"));
+			} else { 
+				System.out.println("ERROR: HADOOP_HOME not set!");
+				System.exit(0);
+			}
+			
+		}
+		
+		FileSystem fs = FileSystem.get(conf);
+		Map map = new HashMap();
+		map.put("conf", conf);
+		map.put("fs", fs);
+        return map;
+		
 	}
 
 }

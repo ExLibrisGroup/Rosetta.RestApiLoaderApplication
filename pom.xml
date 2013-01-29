@@ -63,11 +63,16 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.4</version>
 		</dependency>
-		<dependency>
+		<!-- dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-core</artifactId>
 			<version>0.20.203.0</version>
-		</dependency>
+		</dependency -->
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-core</artifactId>
+  			<version>0.20.2-cdh3u4</version>
+  		</dependency>	
 	</dependencies>
 
 	<build>
