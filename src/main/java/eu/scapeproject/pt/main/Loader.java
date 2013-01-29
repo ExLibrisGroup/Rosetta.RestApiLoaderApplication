@@ -31,15 +31,22 @@ import eu.scapeproject.Sip;
 
 /**
  * * Utility command line application for the SCAPE Loader Application.
- * usage: {java -jar}
- *       target/loader-app-0.0.1-SNAPSHOT-jar-with-dependencies.jar [-d
-       <arg>] [-h] [-i <arg>] [-l <arg>] [-u <arg>]
- * -d,--dir <arg>     Local input directory (Required)
- * -u,--url <arg>     base URL of the repository (Required).
- * -h,--help          print this message.
- * -i,--ingest  <arg>      ingest REST endpoint [default: entity-async] (Optional).
- * -l,--lifecycle <arg>    lifecycle REST endpoint [default: lifecycle] (Optional).
- * -p,--period <arg>    Period to fetch lifecycle states [default: 1 min].
+ * usage: java -jar loader-app-0.0.1-SNAPSHOT-jar-with-dependencies.jar [-c
+ *      <arg>] [-d <arg>] [-h] [-i <arg>] [-l <arg>] [-p <arg>] [-r <arg>]
+ *      [-t <arg>] [-u <arg>]
+ *-c,--checklifecycle <arg>   activate the periodic lifecycle retrieval.
+ *                            [default: true]
+ *-d,--dir <arg>              Local input directory (Required). If a
+ *                            sequence file is given, an extraction into a
+ *                            local sips directory will be performed
+ *-h,--help                   print this message.
+ *-i,--ingest <arg>           ingest REST endpoint [default: entity-async].
+ *-l,--lifecycle <arg>        lifecycle REST endpoint [default: lifecycle].
+ *-p,--password <arg>         password of the repository user.
+ *-r,--url <arg>              base URL of the repository (Required).
+ *-t,--period <arg>           Period in min to fetch lifecycle states
+ *                            [default: 100 min].
+ *-u,--username <arg>         username of the repository user.
  *                    
  * @author mhn
  *
@@ -66,7 +73,17 @@ public class Loader {
 			loaderapp.cleanQueue();
 			
 			// fetch sips from directory
-			LoaderIO io = new LoaderIO(); 
+			LoaderIO io = new LoaderIO();
+			io.cleandir(); 
+			
+			// fetch sips from a sequence file or a given directory? 
+			if (conf.getDir().contains(".seq")) {
+				logger.info("A sequence file has been identified."); 
+				io.extractSeqFile(conf.getDir());
+				// local source dir where the seq file has been extracted to
+				conf.setDir("sips/");
+			} 
+			
 			String[] files = io.getFiles(conf.getDir());
 			if (files != null  && files.length > 0) {
 				
