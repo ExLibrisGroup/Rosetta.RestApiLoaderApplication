@@ -65,9 +65,12 @@ public class LoaderIO {
           int index = key.toString().lastIndexOf("/");
           String filename = key.toString().substring(index+1);
           byte[] _mets = val.getBytes();
-          String mets = new String(_mets, "UTF-8");
-          int endIndex = mets.indexOf("</METS:mets>");
-          String mets1 = mets.substring(0, endIndex+12);
+          int bytesLen = val.getLength();
+          byte[] slicedBytes = new byte[bytesLen];
+          System.arraycopy(_mets, 0, slicedBytes, 0, bytesLen);
+          String mets1 = new String(slicedBytes, "UTF-8");
+//          int endIndex = mets.indexOf("</METS:mets>");
+//          String mets1 = mets.substring(0, endIndex+12);
           File file = new File("sips/" + filename);
           logger.info(file.getPath());
           FileUtils.writeStringToFile(file,mets1,"UTF-8");
