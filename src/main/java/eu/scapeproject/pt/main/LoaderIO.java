@@ -66,7 +66,8 @@ public class LoaderIO {
           String filename = key.toString().substring(index+1);
           byte[] _mets = val.getBytes();
           String mets = new String(_mets, "UTF-8");
-          String mets1 = mets.replaceAll("(?i)<METS", "<mets").replaceAll("(?i)</METS", "</mets");
+          int endIndex = mets.indexOf("</METS:mets>");
+          String mets1 = mets.substring(0, endIndex+12);
           File file = new File("sips/" + filename);
           logger.info(file.getPath());
           FileUtils.writeStringToFile(file,mets1,"UTF-8");
