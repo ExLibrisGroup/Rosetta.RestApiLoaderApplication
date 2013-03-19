@@ -25,7 +25,7 @@ public class Options  {
 	    
 	    public static final String DIR_FLG = "d";
 	    public static final String DIR_OPT = "dir";
-	    public static final String DIR_OPT_DESC = "Local input directory (Required). If a sequence file is given, an extraction into a local sips directory will be performed";
+	    public static final String DIR_OPT_DESC = "Local input directory (Required). If a sequence file or a zip-file is given, an extraction into a local sips directory will be performed";
 	    
 	    public static final String URL_FLG = "r";
 	    public static final String URL_OPT = "url";

@@ -37,7 +37,7 @@ import eu.scapeproject.Sip;
  *-c,--checklifecycle <arg>   activate the periodic lifecycle retrieval.
  *                            [default: true]
  *-d,--dir <arg>              Local input directory (Required). If a
- *                            sequence file is given, an extraction into a
+ *                            sequence file or a zip-file is given, an extraction into a
  *                            local sips directory will be performed
  *-h,--help                   print this message.
  *-i,--ingest <arg>           ingest REST endpoint [default: entity-async].
@@ -82,7 +82,11 @@ public class Loader {
 				io.extractSeqFile(conf.getDir());
 				// local source dir where the seq file has been extracted to
 				conf.setDir("sips/");
-			} 
+			} else if (conf.getDir().contains(".zip")) {
+				logger.info("A zip folder has been identified.");
+				io.extractZipFile(conf.getDir());
+				conf.setDir("sips/");
+			}
 			
 			String[] files = io.getFiles(conf.getDir());
 			if (files != null  && files.length > 0) {
