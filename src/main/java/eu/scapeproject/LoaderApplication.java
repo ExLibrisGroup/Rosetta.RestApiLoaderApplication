@@ -214,13 +214,13 @@ public class LoaderApplication {
      * @return
      */
     private String extractLifecyclestate(String response) { 
-    	Pattern pattern = Pattern.compile("lifecyclestate=.*\"/>"); 
+    	Pattern pattern = Pattern.compile("lifecyclestate=.*\">"); 
 		Matcher matcher = pattern.matcher(response);
 		String result = STATE.SUBMITTED_TO_REPOSITORY.name(); 
 		while (matcher.find()) { 
 		     String[] x = matcher.group().split("=");
 		     if(x.length > 1) {
-		       result = x[1].substring(1, x[1].length()-3);
+		       result = x[1].substring(1, x[1].length()-2);
 		     } 
 		}
 		
