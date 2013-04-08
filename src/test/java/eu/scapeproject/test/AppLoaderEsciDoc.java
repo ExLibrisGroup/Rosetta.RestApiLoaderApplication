@@ -9,10 +9,10 @@ import eu.scapeproject.pt.main.Loader;
 public class AppLoaderEsciDoc {
 	
 	
-	//@Test
+	@Test
 	public void load() { 
 		
-		String[] args = {"-d /tmp/escidoc", "-r http://localhost:8080", "-i scape/entity-async", "-l scape/lifecycle", "-t 3", "-u sysadmin", "-p esciDoc"};
+		String[] args = {"-d /tmp/escidoc", "-r http://localhost:8080", "-i scape/entity-async", "-l scape/lifecycle", "-t 3", "-u sysadmin", "-p sysadmin"};
 		try {
 			Loader.main(args);
 		} catch (ParseException e) {
