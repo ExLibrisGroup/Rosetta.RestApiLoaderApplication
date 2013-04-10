@@ -101,7 +101,7 @@ public class Loader {
 				// retrieve lifecycle state as a scheduled task
 				if (conf.getChecklifecycle()=="true") {
 				  logger.info("Retrieve lifecycle states in " + conf.getPeriod() + " minutes - please be patient.");
-				  logger.info("System will be shutdown automatically after " + 10*Integer.parseInt(conf.getPeriod()) + " minutes.");
+				  //logger.info("System will be shutdown automatically after " + 10*Integer.parseInt(conf.getPeriod()) + " minutes.");
 
 					ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 					// the period depends on the number of objects.

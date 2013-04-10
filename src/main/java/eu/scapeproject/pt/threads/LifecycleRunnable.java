@@ -42,6 +42,7 @@ public class LifecycleRunnable implements Runnable {
 		
 		    try { 
 				Deque<Sip> q = loaderapp.getSipsByState(STATE.SUBMITTED_TO_REPOSITORY);
+				Deque<Sip> submitted = q;
 				if (q.size() == 0) q = loaderapp.getSipsByState(STATE.INGESTING);
 				logger.info("Retrieval of lifecycle states started....");
 				for (Sip sip : q) {
@@ -66,7 +67,7 @@ public class LifecycleRunnable implements Runnable {
 				}
 				
 				// Report Generation
-				Deque<Sip> submitted = loaderapp.getSipsByState(STATE.SUBMITTED_TO_REPOSITORY);
+				//Deque<Sip> submitted = loaderapp.getSipsByState(STATE.SUBMITTED_TO_REPOSITORY);
 				Deque<Sip> ingested = loaderapp.getSipsByState(STATE.INGESTED);
 				Deque<Sip> ingesting = loaderapp.getSipsByState(STATE.INGESTING);
 				Deque<Sip> failed = loaderapp.getSipsByState(STATE.FAILED);
@@ -75,9 +76,16 @@ public class LifecycleRunnable implements Runnable {
 
 				logger.info("Submitted to Repository: " + submitted.size());
 				logger.info("Ingested: " + ingested.size());
-				logger.info("failed: " + failed.size());
-				logger.info("inprogress: " + inprogress.size());
-				logger.info("pending: " + pending.size());
+				logger.info("Failed: " + failed.size());
+				//logger.info("Inprogress: " + inprogress.size());
+				int _pending = 0;
+				if (submitted.size() >= ingested.size()) { 
+					 _pending = submitted.size()-ingested.size();
+				} else { 
+					_pending = submitted.size();
+				}
+				
+				logger.info("Pending: " + Integer.toString(_pending));
 				logger.info("Next retrieve of lifecycle states in " + period + " minutes - please be patient.");
 				
 				if (logger.isDebugEnabled()) {

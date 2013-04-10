@@ -12,12 +12,12 @@ public class AppLoaderEsciDoc {
 	@Test
 	public void load() { 
 		
-		String[] args = {"-d /tmp/escidoc", "-r http://localhost:8080", "-i scape/entity-async", "-l scape/lifecycle", "-t 3", "-u sysadmin", "-p sysadmin"};
+		String[] args = {"-d /home/mhn/Entwicklung/scripts/loader/singlesip", "-r http://localhost:8080", "-i scape/entity-async", "-l scape/lifecycle", "-t 1", "-u sysadmin", "-p sysadmin"};
 		try {
 			Loader.main(args);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
 }
