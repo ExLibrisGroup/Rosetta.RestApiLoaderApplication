@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<METS:mets xmlns:METS="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gbs="http://books.google.com/gbs" xmlns:PREMIS="info:lc/xmlns/premis-v2" xmlns:marc="http://www.loc.gov/MARC21/slim" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd
+                               http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd
+                               info:lc/xmlns/premis-v2 http://www.loc.gov/standards/premis/premis.xsd" OBJID="ONB_+Z35071501" PROFILE="gbs">
+	<METS:metsHdr ID="HDR1" CREATEDATE="2011-08-24T07:17:38" RECORDSTATUS="NEW">
+		<METS:agent ROLE="CREATOR" TYPE="ORGANIZATION">
+			<METS:name>Google</METS:name>
+		</METS:agent>
+	</METS:metsHdr>
+	<METS:dmdSec ID="DMDMARC" xmlns="http://www.loc.gov/MARC21/slim">
+		<METS:mdWrap MIMETYPE="text/xml" MDTYPE="MARC" LABEL="Source MARC record">
+			<METS:xmlData>
+				<record xmlns="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+  <leader>     nam  2200000 u 4500</leader>
+  <controlfield tag="001">AC03009438</controlfield>
+  <controlfield tag="008">000720s1848                  |||   ger</controlfield>
+  <controlfield tag="005">20010411</controlfield>
+  <datafield tag="041" ind1="0" ind2="7">
+    <subfield code="a">ger</subfield>
+    <subfield code="2">ISO 639-2</subfield>
+  </datafield>
+  <controlfield tag="007">zz|||||||||||||||||||||</controlfield>
+  <datafield tag="700" ind1="1" ind2=" ">
+    <subfield code="a">Hoyos-Sprinzenstein, Johann Ernst &lt;&lt;von&gt;&gt;</subfield>
+  </datafield>
+  <datafield tag="245" ind1="0" ind2="0">
+    <subfield code="a">Tagsbefehl für die Nationalgarde</subfield>
+    <subfield code="b">Am 20. März 1848</subfield>
+    <subfield code="c">[Hoyos]</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+    <subfield code="a">[Wien]</subfield>
+    <subfield code="c">1848</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+    <subfield code="a">[2] Bl.</subfield>
+  </datafield>
+  <datafield tag="955" ind1=" " ind2=" ">
+    <subfield code="1">ZALT</subfield>
+    <subfield code="2">MAG</subfield>
+    <subfield code="b">+Z35071501</subfield>
+    <subfield code="4">304507-D</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="4">
+    <subfield code="a">Wien</subfield>
+    <subfield code="x">Revolution &lt;1848&gt;</subfield>
+    <subfield code="x">Bürgerwehr</subfield>
+    <subfield code="y">Geschichte</subfield>
+    <subfield code="v">Quelle</subfield>
+  </datafield>
+  <datafield tag="651" ind1=" " ind2="4">
+    <subfield code="a">Wien</subfield>
+    <subfield code="x">Revolution &lt;1848&gt;</subfield>
+    <subfield code="x">Militär</subfield>
+    <subfield code="y">Geschichte</subfield>
+    <subfield code="v">Quelle</subfield>
+  </datafield>
+</record>
+
+
+</METS:xmlData>
+</METS:mdWrap>
+</METS:dmdSec>
+
+<METS:amdSec>
+  <METS:techMD ID="TMD1">
+    <METS:mdWrap LABEL="production notes" MDTYPE="OTHER" OTHERMDTYPE="Google Production Notes">
+      <METS:xmlData>
+        <gbs:productionNotes>
+          <gbs:badPages>0.00</gbs:badPages>
+          <gbs:missingPages>0.00</gbs:missingPages>
+          <gbs:tightBoundPages>0.00</gbs:tightBoundPages>
+        </gbs:productionNotes>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+
+  <METS:techMD ID="IMAGE_METHOD0">
+    <METS:mdWrap LABEL="method of image production" MDTYPE="OTHER" OTHERMDTYPE="Scan Details">
+      <METS:xmlData>
+        <gbs:imageMethod scanner="PHOTOSTATION_V1">non-destructive</gbs:imageMethod>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+
+  <METS:techMD ID="CALIB_7645443819671895313">
+    <METS:mdWrap LABEL="calibration target" MDTYPE="OTHER" OTHERMDTYPE="Calibration target">
+      <METS:xmlData>
+        <gbs:focusParameters threshold="40%">
+        </gbs:focusParameters>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+  
+  <METS:techMD ID="BACK_COVER">
+    <METS:mdWrap LABEL="page tags" MDTYPE="OTHER" OTHERMDTYPE="Google">
+      <METS:xmlData>
+        <gbs:pageTag>BACK_COVER</gbs:pageTag>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+  <METS:techMD ID="BLANK">
+    <METS:mdWrap LABEL="page tags" MDTYPE="OTHER" OTHERMDTYPE="Google">
+      <METS:xmlData>
+        <gbs:pageTag>BLANK</gbs:pageTag>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+  <METS:techMD ID="CHAPTER_START">
+    <METS:mdWrap LABEL="page tags" MDTYPE="OTHER" OTHERMDTYPE="Google">
+      <METS:xmlData>
+        <gbs:pageTag>CHAPTER_START</gbs:pageTag>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+  <METS:techMD ID="FIRST_CONTENT_CHAPTER_START">
+    <METS:mdWrap LABEL="page tags" MDTYPE="OTHER" OTHERMDTYPE="Google">
+      <METS:xmlData>
+        <gbs:pageTag>FIRST_CONTENT_CHAPTER_START</gbs:pageTag>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+  <METS:techMD ID="FRONT_COVER">
+    <METS:mdWrap LABEL="page tags" MDTYPE="OTHER" OTHERMDTYPE="Google">
+      <METS:xmlData>
+        <gbs:pageTag>FRONT_COVER</gbs:pageTag>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+  <METS:techMD ID="IMAGE_ON_PAGE">
+    <METS:mdWrap LABEL="page tags" MDTYPE="OTHER" OTHERMDTYPE="Google">
+      <METS:xmlData>
+        <gbs:pageTag>IMAGE_ON_PAGE</gbs:pageTag>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+  <METS:techMD ID="IMPLICIT_PAGE_NUMBER">
+    <METS:mdWrap LABEL="page tags" MDTYPE="OTHER" OTHERMDTYPE="Google">
+      <METS:xmlData>
+        <gbs:pageTag>IMPLICIT_PAGE_NUMBER</gbs:pageTag>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+
+  <METS:techMD ID="PD1">
+    <METS:mdWrap LABEL="reading order" MDTYPE="OTHER" OTHERMDTYPE="Google">
+      <METS:xmlData>
+        <gbs:scanningOrder>unknown</gbs:scanningOrder>
+        <gbs:readingOrder>unknown</gbs:readingOrder>
+        <gbs:coverTag>follows-reading-order</gbs:coverTag>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+
+  <METS:sourceMD ID="S1">
+    <METS:mdWrap MDTYPE="OTHER" OTHERMDTYPE="Google" LABEL="DESCMDRecord_Source_Library">
+      <METS:xmlData>
+        <gbs:sourceLibrary>ONB</gbs:sourceLibrary>
+        <gbs:sourceIdentifier>+Z35071501</gbs:sourceIdentifier>
+      </METS:xmlData>
+     </METS:mdWrap>
+  </METS:sourceMD>
+
+  <METS:digiprovMD ID="PREMIS1" xmlns="info:lc/xmlns/premis-v2">
+    <METS:mdWrap MDTYPE="PREMIS">
+      <METS:xmlData>
+        <PREMIS:premis version="2.0">
+          <PREMIS:object xsi:type="representation">
+            <PREMIS:objectIdentifier>
+              <PREMIS:objectIdentifierType>barcode</PREMIS:objectIdentifierType>
+              <PREMIS:objectIdentifierValue>ONB_+Z35071501</PREMIS:objectIdentifierValue>
+            </PREMIS:objectIdentifier>
+            <PREMIS:significantProperties>
+              <PREMIS:significantPropertiesType>file count</PREMIS:significantPropertiesType>
+              <PREMIS:significantPropertiesValue>38</PREMIS:significantPropertiesValue>
+            </PREMIS:significantProperties>
+            <PREMIS:significantProperties>
+              <PREMIS:significantPropertiesType>page count</PREMIS:significantPropertiesType>
+              <PREMIS:significantPropertiesValue>12</PREMIS:significantPropertiesValue>
+            </PREMIS:significantProperties>
+          </PREMIS:object>
+          <PREMIS:event xmlID="Google_Scan">
+            <PREMIS:eventIdentifier>
+              <PREMIS:eventIdentifierType>Google generated</PREMIS:eventIdentifierType>
+              <PREMIS:eventIdentifierValue>Google_Scan</PREMIS:eventIdentifierValue>
+            </PREMIS:eventIdentifier>
+            <PREMIS:eventType>Scan</PREMIS:eventType>
+            <PREMIS:eventDateTime>2011-06-07T01:06:46</PREMIS:eventDateTime>
+            <PREMIS:eventDetail>Original image capture</PREMIS:eventDetail>
+            <PREMIS:linkingAgentIdentifier>
+              <PREMIS:linkingAgentIdentifierType>AgentID</PREMIS:linkingAgentIdentifierType>
+              <PREMIS:linkingAgentIdentifierValue>Google (Firm)</PREMIS:linkingAgentIdentifierValue>
+            </PREMIS:linkingAgentIdentifier>
+          </PREMIS:event>
+          <PREMIS:event xmlID="Google_Process">
+            <PREMIS:eventIdentifier>
+              <PREMIS:eventIdentifierType>Google generated</PREMIS:eventIdentifierType>
+              <PREMIS:eventIdentifierValue>Google_Process</PREMIS:eventIdentifierValue>
+            </PREMIS:eventIdentifier>
+            <PREMIS:eventType>Process</PREMIS:eventType>
+            <PREMIS:eventDateTime>2011-06-07T01:31:33</PREMIS:eventDateTime>
+            <PREMIS:eventDetail>Refinement and cleaning of raw scanned images using image enhancement techniques</PREMIS:eventDetail>
+            <PREMIS:linkingAgentIdentifier>
+              <PREMIS:linkingAgentIdentifierType>AgentID</PREMIS:linkingAgentIdentifierType>
+              <PREMIS:linkingAgentIdentifierValue>Google (Firm)</PREMIS:linkingAgentIdentifierValue>
+            </PREMIS:linkingAgentIdentifier>
+          </PREMIS:event>
+          <PREMIS:event xmlID="Google_Analyze">
+            <PREMIS:eventIdentifier>
+              <PREMIS:eventIdentifierType>Google generated</PREMIS:eventIdentifierType>
+              <PREMIS:eventIdentifierValue>Google_Analyze</PREMIS:eventIdentifierValue>
+            </PREMIS:eventIdentifier>
+            <PREMIS:eventType>Analyze</PREMIS:eventType>
+            <PREMIS:eventDateTime>2011-12-12T07:06:23</PREMIS:eventDateTime>
+            <PREMIS:eventDetail>Automated quality assessment, extraction of OCR text and metadata, assignment of metadata tags, and page ordering</PREMIS:eventDetail>
+            <PREMIS:linkingAgentIdentifier>
+              <PREMIS:linkingAgentIdentifierType>AgentID</PREMIS:linkingAgentIdentifierType>
+              <PREMIS:linkingAgentIdentifierValue>Google (Firm)</PREMIS:linkingAgentIdentifierValue>
+            </PREMIS:linkingAgentIdentifier>
+          </PREMIS:event>
+          <PREMIS:event xmlID="Google_Convert">
+            <PREMIS:eventIdentifier>
+              <PREMIS:eventIdentifierType>Google generated</PREMIS:eventIdentifierType>
+              <PREMIS:eventIdentifierValue>Google_Convert</PREMIS:eventIdentifierValue>
+            </PREMIS:eventIdentifier>
+            <PREMIS:eventType>Convert</PREMIS:eventType>
+            <PREMIS:eventDateTime>2012-01-02T05:55:43</PREMIS:eventDateTime>
+            <PREMIS:eventDetail>Creation of partner deliverables</PREMIS:eventDetail>
+            <PREMIS:eventOutcomeInformation>
+              <PREMIS:eventOutcomeDetail>
+                <PREMIS:eventOutcomeDetailNote>Clean</PREMIS:eventOutcomeDetailNote>
+              </PREMIS:eventOutcomeDetail>
+            </PREMIS:eventOutcomeInformation>
+            <PREMIS:linkingAgentIdentifier>
+              <PREMIS:linkingAgentIdentifierType>AgentID</PREMIS:linkingAgentIdentifierType>
+              <PREMIS:linkingAgentIdentifierValue>Google (Firm)</PREMIS:linkingAgentIdentifierValue>
+            </PREMIS:linkingAgentIdentifier>
+          </PREMIS:event>
+          <PREMIS:event xmlID="Google_Rubbish">
+            <PREMIS:eventIdentifier>
+              <PREMIS:eventIdentifierType>Google generated</PREMIS:eventIdentifierType>
+              <PREMIS:eventIdentifierValue>Google_Rubbish</PREMIS:eventIdentifierValue>
+            </PREMIS:eventIdentifier>
+            <PREMIS:eventType>Rubbish</PREMIS:eventType>
+            <PREMIS:eventDateTime>2011-06-07T01:06:46</PREMIS:eventDateTime>
+            <PREMIS:eventDetail>Partial Manual Quality Evaluation</PREMIS:eventDetail>
+            <PREMIS:eventOutcomeInformation>
+              <PREMIS:eventOutcomeDetail>
+                <PREMIS:eventOutcomeDetailExtension>
+                  <gbs:problem_pages>
+                  </gbs:problem_pages>
+                  <gbs:no_problem_pages>
+                    <gbs:page>0</gbs:page>
+                    <gbs:page>1</gbs:page>
+                    <gbs:page>2</gbs:page>
+                    <gbs:page>4</gbs:page>
+                    <gbs:page>5</gbs:page>
+                    <gbs:page>6</gbs:page>
+                    <gbs:page>7</gbs:page>
+                    <gbs:page>10</gbs:page>
+                    <gbs:page>11</gbs:page>
+                  </gbs:no_problem_pages>
+                  <gbs:volume_quality>
+                    <gbs:rubbish_result>false</gbs:rubbish_result>
+                    <gbs:errors>
+                    </gbs:errors>
+                  </gbs:volume_quality>
+                </PREMIS:eventOutcomeDetailExtension>
+              </PREMIS:eventOutcomeDetail>
+            </PREMIS:eventOutcomeInformation>
+            <PREMIS:linkingAgentIdentifier>
+              <PREMIS:linkingAgentIdentifierType>AgentID</PREMIS:linkingAgentIdentifierType>
+              <PREMIS:linkingAgentIdentifierValue>Google (Firm)</PREMIS:linkingAgentIdentifierValue>
+            </PREMIS:linkingAgentIdentifier>
+          </PREMIS:event>
+          <PREMIS:agent>
+            <PREMIS:agentIdentifier>
+              <PREMIS:agentIdentifierType>LCNAF</PREMIS:agentIdentifierType>
+              <PREMIS:agentIdentifierValue>Google (Firm)</PREMIS:agentIdentifierValue>
+            </PREMIS:agentIdentifier>
+            <PREMIS:agentType>organization</PREMIS:agentType>
+          </PREMIS:agent>
+        </PREMIS:premis>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:digiprovMD>
+  
+</METS:amdSec>
+
+
+</METS:mets>

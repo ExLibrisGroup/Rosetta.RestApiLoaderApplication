@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<METS:mets xmlns:METS="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gbs="http://books.google.com/gbs" xmlns:PREMIS="info:lc/xmlns/premis-v2" xmlns:marc="http://www.loc.gov/MARC21/slim" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd
+                               http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd
+                               info:lc/xmlns/premis-v2 http://www.loc.gov/standards/premis/premis.xsd" OBJID="ONB_+Z35072001" PROFILE="gbs">
+	<METS:metsHdr ID="HDR1" CREATEDATE="2011-08-24T07:17:38" RECORDSTATUS="NEW">
+		<METS:agent ROLE="CREATOR" TYPE="ORGANIZATION">
+			<METS:name>Google</METS:name>
+		</METS:agent>
+	</METS:metsHdr>
+	<METS:dmdSec ID="DMDMARC" xmlns="http://www.loc.gov/MARC21/slim">
+		<METS:mdWrap MIMETYPE="text/xml" MDTYPE="MARC" LABEL="Source MARC record">
+			<METS:xmlData>
+				<record xmlns="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim
+http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+					<leader>     nam  2200000 u 4500</leader>
+					<controlfield tag="001">AC03009537</controlfield>
+					<controlfield tag="008">000720s1749                  |||</controlfield>
+					<controlfield tag="005">20070908</controlfield>
+					<datafield tag="760" ind1="0" ind2=" ">
+						<subfield code="o">AC03009531</subfield>
+					</datafield>
+					<controlfield tag="007">zz|||||||||||||||||||||</controlfield>
+					<datafield tag="245" ind1="0" ind2="0">
+						<subfield code="n">1</subfield>
+						<subfield code="a">Complectens Veteris Testamenti Legem, Et Legis Historiam</subfield>
+					</datafield>
+					<datafield tag="260" ind1=" " ind2=" ">
+						<subfield code="c">1749</subfield>
+					</datafield>
+					<datafield tag="300" ind1=" " ind2=" ">
+						<subfield code="a">[14] Bl., 844 S.</subfield>
+					</datafield>
+					<datafield tag="955" ind1=" " ind2=" ">
+						<subfield code="1">ZALT</subfield>
+						<subfield code="2">MAG</subfield>
+						<subfield code="b">+Z35072001</subfield>
+						<subfield code="4">304480-D.1</subfield>
+					</datafield>
+				</record>
+			</METS:xmlData>
+		</METS:mdWrap>
+	</METS:dmdSec>
+	<METS:amdSec>
+  <METS:techMD ID="TMD1">
+    <METS:mdWrap LABEL="production notes" MDTYPE="OTHER" OTHERMDTYPE="Google Production Notes">
+      <METS:xmlData>
+        <gbs:productionNotes>
+          <gbs:badPages>35.61</gbs:badPages>
+          <gbs:missingPages>0.00</gbs:missingPages>
+          <gbs:tightBoundPages>0.00</gbs:tightBoundPages>
+        </gbs:productionNotes>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+
+  <METS:techMD ID="IMAGE_METHOD0">
+    <METS:mdWrap LABEL="method of image production" MDTYPE="OTHER" OTHERMDTYPE="Scan Details">
+      <METS:xmlData>
+        <gbs:imageMethod scanner="PHOTOSTATION_V1">non-destructive</gbs:imageMethod>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+
+  <METS:techMD ID="CALIB_917241718794559637">
+    <METS:mdWrap LABEL="calibration target" MDTYPE="OTHER" OTHERMDTYPE="Calibration target">
+      <METS:xmlData>
+        <gbs:focusParameters threshold="40%">
+        </gbs:focusParameters>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+  
+  <METS:techMD ID="BACK_COVER">
+    <METS:mdWrap LABEL="page tags" MDTYPE="OTHER" OTHERMDTYPE="Google">
+      <METS:xmlData>
+        <gbs:pageTag>BACK_COVER</gbs:pageTag>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+  <METS:techMD ID="CHAPTER_START">
+    <METS:mdWrap LABEL="page tags" MDTYPE="OTHER" OTHERMDTYPE="Google">
+      <METS:xmlData>
+        <gbs:pageTag>CHAPTER_START</gbs:pageTag>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+  <METS:techMD ID="FIRST_CONTENT_CHAPTER_START">
+    <METS:mdWrap LABEL="page tags" MDTYPE="OTHER" OTHERMDTYPE="Google">
+      <METS:xmlData>
+        <gbs:pageTag>FIRST_CONTENT_CHAPTER_START</gbs:pageTag>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+  <METS:techMD ID="FRONT_COVER">
+    <METS:mdWrap LABEL="page tags" MDTYPE="OTHER" OTHERMDTYPE="Google">
+      <METS:xmlData>
+        <gbs:pageTag>FRONT_COVER</gbs:pageTag>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+  <METS:techMD ID="IMPLICIT_PAGE_NUMBER">
+    <METS:mdWrap LABEL="page tags" MDTYPE="OTHER" OTHERMDTYPE="Google">
+      <METS:xmlData>
+        <gbs:pageTag>IMPLICIT_PAGE_NUMBER</gbs:pageTag>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+  <METS:techMD ID="PAGE_TURNBACK">
+    <METS:mdWrap LABEL="page tags" MDTYPE="OTHER" OTHERMDTYPE="Google">
+      <METS:xmlData>
+        <gbs:pageTag>PAGE_TURNBACK</gbs:pageTag>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+
+  <METS:techMD ID="PD1">
+    <METS:mdWrap LABEL="reading order" MDTYPE="OTHER" OTHERMDTYPE="Google">
+      <METS:xmlData>
+        <gbs:pageOrder>left-to-right</gbs:pageOrder>
+        <gbs:pageSequence>reading-order</gbs:pageSequence>
+        <gbs:coverTag>reading-order</gbs:coverTag>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:techMD>
+
+  <METS:sourceMD ID="S1">
+    <METS:mdWrap MDTYPE="OTHER" OTHERMDTYPE="Google" LABEL="DESCMDRecord_Source_Library">
+      <METS:xmlData>
+        <gbs:sourceLibrary>ONB</gbs:sourceLibrary>
+        <gbs:sourceIdentifier>+Z35072001</gbs:sourceIdentifier>
+      </METS:xmlData>
+     </METS:mdWrap>
+  </METS:sourceMD>
+
+  <METS:digiprovMD ID="PREMIS1" xmlns="info:lc/xmlns/premis-v2">
+    <METS:mdWrap MDTYPE="PREMIS">
+      <METS:xmlData>
+        <PREMIS:premis version="2.0">
+          <PREMIS:object xsi:type="representation">
+            <PREMIS:objectIdentifier>
+              <PREMIS:objectIdentifierType>barcode</PREMIS:objectIdentifierType>
+              <PREMIS:objectIdentifierValue>ONB_+Z35072001</PREMIS:objectIdentifierValue>
+            </PREMIS:objectIdentifier>
+            <PREMIS:significantProperties>
+              <PREMIS:significantPropertiesType>file count</PREMIS:significantPropertiesType>
+              <PREMIS:significantPropertiesValue>2774</PREMIS:significantPropertiesValue>
+            </PREMIS:significantProperties>
+            <PREMIS:significantProperties>
+              <PREMIS:significantPropertiesType>page count</PREMIS:significantPropertiesType>
+              <PREMIS:significantPropertiesValue>924</PREMIS:significantPropertiesValue>
+            </PREMIS:significantProperties>
+          </PREMIS:object>
+          <PREMIS:event xmlID="Google_Scan">
+            <PREMIS:eventIdentifier>
+              <PREMIS:eventIdentifierType>Google generated</PREMIS:eventIdentifierType>
+              <PREMIS:eventIdentifierValue>Google_Scan</PREMIS:eventIdentifierValue>
+            </PREMIS:eventIdentifier>
+            <PREMIS:eventType>Scan</PREMIS:eventType>
+            <PREMIS:eventDateTime>2011-06-07T10:28:00</PREMIS:eventDateTime>
+            <PREMIS:eventDetail>Original image capture</PREMIS:eventDetail>
+            <PREMIS:linkingAgentIdentifier>
+              <PREMIS:linkingAgentIdentifierType>AgentID</PREMIS:linkingAgentIdentifierType>
+              <PREMIS:linkingAgentIdentifierValue>Google (Firm)</PREMIS:linkingAgentIdentifierValue>
+            </PREMIS:linkingAgentIdentifier>
+          </PREMIS:event>
+          <PREMIS:event xmlID="Google_Process">
+            <PREMIS:eventIdentifier>
+              <PREMIS:eventIdentifierType>Google generated</PREMIS:eventIdentifierType>
+              <PREMIS:eventIdentifierValue>Google_Process</PREMIS:eventIdentifierValue>
+            </PREMIS:eventIdentifier>
+            <PREMIS:eventType>Process</PREMIS:eventType>
+            <PREMIS:eventDateTime>2011-06-07T14:56:18</PREMIS:eventDateTime>
+            <PREMIS:eventDetail>Refinement and cleaning of raw scanned images using image enhancement techniques</PREMIS:eventDetail>
+            <PREMIS:linkingAgentIdentifier>
+              <PREMIS:linkingAgentIdentifierType>AgentID</PREMIS:linkingAgentIdentifierType>
+              <PREMIS:linkingAgentIdentifierValue>Google (Firm)</PREMIS:linkingAgentIdentifierValue>
+            </PREMIS:linkingAgentIdentifier>
+          </PREMIS:event>
+          <PREMIS:event xmlID="Google_Analyze">
+            <PREMIS:eventIdentifier>
+              <PREMIS:eventIdentifierType>Google generated</PREMIS:eventIdentifierType>
+              <PREMIS:eventIdentifierValue>Google_Analyze</PREMIS:eventIdentifierValue>
+            </PREMIS:eventIdentifier>
+            <PREMIS:eventType>Analyze</PREMIS:eventType>
+            <PREMIS:eventDateTime>2011-08-06T06:47:05</PREMIS:eventDateTime>
+            <PREMIS:eventDetail>Automated quality assessment, extraction of OCR text and metadata, assignment of metadata tags, and page ordering</PREMIS:eventDetail>
+            <PREMIS:linkingAgentIdentifier>
+              <PREMIS:linkingAgentIdentifierType>AgentID</PREMIS:linkingAgentIdentifierType>
+              <PREMIS:linkingAgentIdentifierValue>Google (Firm)</PREMIS:linkingAgentIdentifierValue>
+            </PREMIS:linkingAgentIdentifier>
+          </PREMIS:event>
+          <PREMIS:event xmlID="Google_Convert">
+            <PREMIS:eventIdentifier>
+              <PREMIS:eventIdentifierType>Google generated</PREMIS:eventIdentifierType>
+              <PREMIS:eventIdentifierValue>Google_Convert</PREMIS:eventIdentifierValue>
+            </PREMIS:eventIdentifier>
+            <PREMIS:eventType>Convert</PREMIS:eventType>
+            <PREMIS:eventDateTime>2011-08-24T07:17:38</PREMIS:eventDateTime>
+            <PREMIS:eventDetail>Creation of partner deliverables</PREMIS:eventDetail>
+            <PREMIS:linkingAgentIdentifier>
+              <PREMIS:linkingAgentIdentifierType>AgentID</PREMIS:linkingAgentIdentifierType>
+              <PREMIS:linkingAgentIdentifierValue>Google (Firm)</PREMIS:linkingAgentIdentifierValue>
+            </PREMIS:linkingAgentIdentifier>
+          </PREMIS:event>
+          <PREMIS:agent>
+            <PREMIS:agentIdentifier>
+              <PREMIS:agentIdentifierType>LCNAF</PREMIS:agentIdentifierType>
+              <PREMIS:agentIdentifierValue>Google (Firm)</PREMIS:agentIdentifierValue>
+            </PREMIS:agentIdentifier>
+            <PREMIS:agentType>organization</PREMIS:agentType>
+          </PREMIS:agent>
+        </PREMIS:premis>
+      </METS:xmlData>
+    </METS:mdWrap>
+  </METS:digiprovMD>
+</METS:amdSec>    
+<METS:fileSec>
+  <METS:fileGrp ID="FG1" USE="image">
+    <METS:file ID="IMG00000001" MIMETYPE="image/jp2" SEQ="00000001" CREATED="2011-06-07T00:00:00" SIZE="133110" CHECKSUM="9286e72c54c16c55bed50fe30d7da1bf" CHECKSUMTYPE="MD5" OWNERID="31525197396430404-1" ADMID="IMAGE_METHOD0">
+      <METS:FLocat xlink:href="/home/mhn/git/loader-app/resources/00000001.jp2" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+    </METS:file>
+    <METS:file ID="IMG00000002" MIMETYPE="image/jp2" SEQ="00000002" CREATED="2011-06-07T00:00:00" SIZE="52736" CHECKSUM="9089b84edb7577011c221146bbb589dd" CHECKSUMTYPE="MD5" OWNERID="31525197396430404-2" ADMID="IMAGE_METHOD0">
+      <METS:FLocat xlink:href="/home/mhn/git/loader-app/resources/00000002.jp2" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+    </METS:file>
+    <METS:file ID="IMG00000003" MIMETYPE="image/jp2" SEQ="00000003" CREATED="2011-06-07T00:00:00" SIZE="390102" CHECKSUM="b712a11f1bddc0cbdbaae77bd7b41d04" CHECKSUMTYPE="MD5" OWNERID="31525197396430404-3" ADMID="IMAGE_METHOD0">
+      <METS:FLocat xlink:href="/home/mhn/git/loader-app/resources/00000003.jp2" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+    </METS:file>
+    <METS:file ID="IMG00000004" MIMETYPE="image/jp2" SEQ="00000004" CREATED="2011-06-07T00:00:00" SIZE="97057" CHECKSUM="89bc48bdce227f7bca24efffa7de9724" CHECKSUMTYPE="MD5" OWNERID="31525197396430404-4" ADMID="IMAGE_METHOD0">
+      <METS:FLocat xlink:href="/home/mhn/git/loader-app/resources/00000004.jp2" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+    </METS:file>
+  </METS:fileGrp>
+  <METS:fileGrp ID="FG2" USE="OCR">
+   <METS:file ID="TXT00000001" MIMETYPE="text/plain" SEQ="00000001" CREATED="2011-06-07T00:00:00" SIZE="2" CHECKSUM="d784fa8b6d98d27699781bd9a7cf19f0" CHECKSUMTYPE="MD5">
+      <METS:FLocat xlink:href="/home/mhn/git/loader-app/resources/00000001.txt" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+    </METS:file>
+    <METS:file ID="TXT00000002" MIMETYPE="text/plain" SEQ="00000002" CREATED="2011-06-07T00:00:00" SIZE="2" CHECKSUM="d784fa8b6d98d27699781bd9a7cf19f0" CHECKSUMTYPE="MD5">
+      <METS:FLocat xlink:href="/home/mhn/git/loader-app/resources/00000002.txt" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+    </METS:file>
+    <METS:file ID="TXT00000003" MIMETYPE="text/plain" SEQ="00000003" CREATED="2011-06-07T00:00:00" SIZE="2" CHECKSUM="d784fa8b6d98d27699781bd9a7cf19f0" CHECKSUMTYPE="MD5">
+      <METS:FLocat xlink:href="/home/mhn/git/loader-app/resources/00000003.txt" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+    </METS:file>
+    <METS:file ID="TXT00000004" MIMETYPE="text/plain" SEQ="00000004" CREATED="2011-06-07T00:00:00" SIZE="2" CHECKSUM="d784fa8b6d98d27699781bd9a7cf19f0" CHECKSUMTYPE="MD5">
+      <METS:FLocat xlink:href="/home/mhn/git/loader-app/resources/00000004.txt" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+    </METS:file>
+  </METS:fileGrp>
+  <METS:fileGrp ID="FG3" USE="coordOCR">
+    <METS:file ID="HTML00000001" MIMETYPE="text/html" SEQ="00000001" CREATED="2011-06-07T00:00:00" SIZE="859" CHECKSUM="5d1d1cbef6c5d12e53ed410d79bf8bb4" CHECKSUMTYPE="MD5">
+      <METS:FLocat xlink:href="/home/mhn/git/loader-app/resources/00000001.html" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+    </METS:file>
+    <METS:file ID="HTML00000002" MIMETYPE="text/html" SEQ="00000002" CREATED="2011-06-07T00:00:00" SIZE="859" CHECKSUM="905ba62c98c2fd9f5d7a72dee917f2fc" CHECKSUMTYPE="MD5">
+      <METS:FLocat xlink:href="/home/mhn/git/loader-app/resources/00000002.html" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+    </METS:file>
+    <METS:file ID="HTML00000003" MIMETYPE="text/html" SEQ="00000003" CREATED="2011-06-07T00:00:00" SIZE="859" CHECKSUM="5e444be0d5b802bfbca7635bcf2f886d" CHECKSUMTYPE="MD5">
+      <METS:FLocat xlink:href="/home/mhn/git/loader-app/resources/00000003.html" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+    </METS:file>
+    <METS:file ID="HTML00000004" MIMETYPE="text/html" SEQ="00000004" CREATED="2011-06-07T00:00:00" SIZE="859" CHECKSUM="bf5b5525663f9d810ede69755ca2841c" CHECKSUMTYPE="MD5">
+      <METS:FLocat xlink:href="/home/mhn/git/loader-app/resources/00000004.html" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+    </METS:file>
+  </METS:fileGrp>
+</METS:fileSec>
+<METS:structMap ID="SM1" TYPE="physical">
+  <METS:div TYPE="volume" ADMID="TMD1 PD1 S1">
+    <METS:div TYPE="page" ORDER="1" ADMID="FRONT_COVER IMPLICIT_PAGE_NUMBER">
+      <METS:fptr FILEID="IMG00000001"/>
+      <METS:fptr FILEID="TXT00000001"/>
+      <METS:fptr FILEID="HTML00000001"/>
+    </METS:div>
+    <METS:div TYPE="page" ORDER="2" ADMID="IMPLICIT_PAGE_NUMBER">
+      <METS:fptr FILEID="IMG00000002"/>
+      <METS:fptr FILEID="TXT00000002"/>
+      <METS:fptr FILEID="HTML00000002"/>
+    </METS:div>
+    <METS:div TYPE="page" ORDER="3" ADMID="IMPLICIT_PAGE_NUMBER">
+      <METS:fptr FILEID="IMG00000003"/>
+      <METS:fptr FILEID="TXT00000003"/>
+      <METS:fptr FILEID="HTML00000003"/>
+    </METS:div>
+    <METS:div TYPE="page" ORDER="4" ADMID="IMPLICIT_PAGE_NUMBER">
+      <METS:fptr FILEID="IMG00000004"/>
+      <METS:fptr FILEID="TXT00000004"/>
+      <METS:fptr FILEID="HTML00000004"/>
+    </METS:div>
+  </METS:div>
+</METS:structMap>
+</METS:mets>
