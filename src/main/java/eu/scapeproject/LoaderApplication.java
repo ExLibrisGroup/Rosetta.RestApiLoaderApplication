@@ -1,5 +1,6 @@
 package eu.scapeproject;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.sql.SQLException;
@@ -122,14 +123,14 @@ public class LoaderApplication {
 					}
 				}
 			
-				
-				sipId = extractSipId(IOUtils.toString(resp.getEntity().getContent()));
+				String ist = IOUtils.toString(resp.getEntity().getContent());
+				sipId = extractSipId(ist);
 				if (sipId != null) {
 					sip.setSipId(sipId);
 					sip.setState(STATE.SUBMITTED_TO_REPOSITORY);
 					logger.info("Return Code: " + resp.getStatusLine().getStatusCode() + " SIP ID: " + sipId);
 				} else { 
-					logger.info("SIP ID is NULL. Is repository up and running?");
+					logger.info("SIP ID is NULL. Is repository up and running? Error Message:" + ist);
 				}
 				post.releaseConnection();
 				
@@ -197,14 +198,16 @@ public class LoaderApplication {
     * @return
     */
     private String extractSipId(String response) { 
-    	String begin = "<scape:value>";
-		String end = "</scape:value>";
-		int beginIndex = response.indexOf(begin);
-		int endIndex = response.indexOf(end);
-		String result = null;
-		if (beginIndex > -1 && endIndex > -1) { 
-			result = response.substring(beginIndex+begin.length(), endIndex);
-		}
+// fuer Fedora 4 geanedert da die sipid nicht in den tags gewrapped zurück kommt
+//    	String begin = "<scape:value>";
+//		String end = "</scape:value>";
+//		int beginIndex = response.indexOf(begin);
+//		int endIndex = response.indexOf(end);
+//		String result = null;
+//		if (beginIndex > -1 && endIndex > -1) { 
+//			result = response.substring(beginIndex+begin.length(), endIndex);
+//		}
+    	String result = response;
 		return result;
     }
     

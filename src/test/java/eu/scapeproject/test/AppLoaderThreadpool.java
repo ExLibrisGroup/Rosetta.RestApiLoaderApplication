@@ -29,11 +29,11 @@ import eu.scapeproject.LoaderDao;
 import eu.scapeproject.Sip;
 import eu.scapeproject.Sip.STATE;
 import eu.scapeproject.model.IntellectualEntity;
-import eu.scapeproject.model.mets.SCAPEMarshaller;
-import eu.scapeproject.model.util.TestUtil;
+import eu.scapeproject.model.TestUtil;
 import eu.scapeproject.pt.main.Configuration;
 import eu.scapeproject.pt.threads.LifecycleRunnable;
 import eu.scapeproject.pt.threads.StopLifecycelTask;
+import eu.scapeproject.util.ScapeMarshaller;
 
 public class AppLoaderThreadpool {
 	
@@ -77,9 +77,9 @@ public class AppLoaderThreadpool {
 		for (int i=0; i<100; i++) {
 			String sipFileName = "sips/mets_entity_" + i + ".xml";
 			java.io.File xmlFile=new java.io.File(sipFileName);
-			IntellectualEntity entity=TestUtil.createRandomEntity();
+			IntellectualEntity entity=TestUtil.createTestEntity("mets_entity" + i);
 			FileOutputStream out=new FileOutputStream(xmlFile);
-			SCAPEMarshaller.getInstance().serialize(entity, out);
+			ScapeMarshaller.newInstance().serialize(entity, out);
 			loaderApplication.enqueuSip(URI.create("file:" + sipFileName));
 		}
 

@@ -15,6 +15,7 @@ import eu.scapeproject.model.IntellectualEntity;
 import eu.scapeproject.model.mets.SCAPEMarshaller;
 import eu.scapeproject.model.util.TestUtil;
 import eu.scapeproject.pt.main.Configuration;
+import eu.scapeproject.util.ScapeMarshaller;
 
 
 /**
@@ -47,9 +48,9 @@ public class AppLoaderTests {
 		for (int i=0; i<100; i++) {
 			String sipFileName = conf.getDir() + "mets_entity_" + i + ".xml";
 			java.io.File xmlFile=new java.io.File(sipFileName);
-			IntellectualEntity entity=TestUtil.createRandomEntity();
+			IntellectualEntity entity=eu.scapeproject.model.TestUtil.createTestEntity("mets_entity_" + i );
 			FileOutputStream out=new FileOutputStream(xmlFile);
-			SCAPEMarshaller.getInstance().serialize(entity, out);
+			ScapeMarshaller.newInstance().serialize(entity, out);
 			loaderApplication.enqueuSip(URI.create("file:" + sipFileName));
 		}
 

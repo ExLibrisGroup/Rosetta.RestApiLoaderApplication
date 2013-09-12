@@ -10,7 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import eu.scapeproject.model.IntellectualEntity;
-import eu.scapeproject.model.mets.SCAPEMarshaller;
+import eu.scapeproject.util.ScapeMarshaller;
 
 
 
@@ -24,7 +24,7 @@ public class EntitySyncServlet extends GenericServlet {
 
         try {
 			IntellectualEntity ie =
-					SCAPEMarshaller.getInstance().deserialize(IntellectualEntity.class, request.getInputStream());
+					ScapeMarshaller.newInstance().deserialize(IntellectualEntity.class, request.getInputStream());
 			System.out.println("Repository Received Ingest Request for IE ID:'" + ie.getIdentifier().getValue() + "' ");
 
 		} catch (Exception e) {

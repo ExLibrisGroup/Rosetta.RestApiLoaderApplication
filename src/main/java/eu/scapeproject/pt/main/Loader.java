@@ -69,7 +69,9 @@ public class Loader {
             Options.initOptions(cmd, conf);
 		
 		try {
-			LoaderApplication loaderapp = new LoaderApplication(conf, new EsciDocAuthentication(conf));
+			//LoaderApplication loaderapp = new LoaderApplication(conf, new EsciDocAuthentication(conf));
+			LoaderApplication loaderapp = new LoaderApplication(conf);
+			
 			loaderapp.cleanQueue();
 			
 			// fetch sips from directory
