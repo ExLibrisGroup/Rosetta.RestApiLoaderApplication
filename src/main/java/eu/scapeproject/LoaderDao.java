@@ -24,6 +24,7 @@ public class LoaderDao {
 	private PreparedStatement insertStatment;
 	private PreparedStatement updateStatment;
 	private PreparedStatement getSipsStatment;
+	private PreparedStatement getSipsNotStatment;
 	private PreparedStatement getNextSeq;
 	private PreparedStatement deleteStatment;
 
@@ -87,6 +88,26 @@ public class LoaderDao {
     	return sips;
     }
 
+    public Deque<Sip> getAllSipsByNotState(STATE state) throws SQLException {
+    	Deque<Sip> sips = new LinkedList<Sip>();
+
+    	getSipsNotStatment.setString(1, state.toString());
+    	ResultSet rs = getSipsNotStatment.executeQuery();
+
+    	Sip sip = null;
+    	while (rs.next()) {
+    		sip = new Sip();
+    		sip.setId(rs.getInt(1));
+    		sip.setSipId(rs.getString(2));
+    		sip.setUri(URI.create(rs.getString(3)));
+    		sip.setState(STATE.valueOf(rs.getString(4)));
+    		sip.setDescription(rs.getString(5));
+    		sips.add(sip);
+    	}
+
+    	return sips;
+    }
+
     public void deleteSacpeSips() throws SQLException {
     	deleteStatment.executeUpdate();
     }
@@ -97,12 +118,14 @@ public class LoaderDao {
     	getSipsStatment.close();
     	deleteStatment.close();
     	getNextSeq.close();
+    	getSipsNotStatment.close();
     }
 
     private void createStatments() throws SQLException {
     	insertStatment = conn.prepareStatement("INSERT INTO SCAPE_SIP (ID, SIP_ID, URI, STATE, DESCRIPTION) VALUES (?, ?, ?, ?, ?)");
     	updateStatment = conn.prepareStatement("UPDATE SCAPE_SIP SET SIP_ID=?, URI=?, STATE=?, DESCRIPTION=? WHERE ID=?");
     	getSipsStatment = conn.prepareStatement("SELECT ID, SIP_ID, URI, STATE, DESCRIPTION FROM SCAPE_SIP WHERE STATE=?");
+    	getSipsNotStatment = conn.prepareStatement("SELECT ID, SIP_ID, URI, STATE, DESCRIPTION FROM SCAPE_SIP WHERE STATE<>?");
     	deleteStatment = conn.prepareStatement("DELETE FROM SCAPE_SIP");
     	getNextSeq = conn.prepareStatement("CALL NEXT VALUE FOR SIP_ID");
     }

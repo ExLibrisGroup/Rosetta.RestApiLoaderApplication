@@ -22,8 +22,8 @@ import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
 
-import eu.scapeproject.model.*;
-import eu.scapeproject.util.ScapeMarshaller;
+import eu.scape_project.model.*;
+import eu.scape_project.util.ScapeMarshaller;
 
 /**
  * Helper class to handle file io, generate random sips and other stuff
@@ -31,15 +31,15 @@ import eu.scapeproject.util.ScapeMarshaller;
  *
  */
 public class LoaderIO {
-	
+
 	private static Logger logger =  Logger.getLogger( LoaderIO.class.getName());
-	
+
 	/**
 	 * reads all xml uri files in a directory
 	 * @param sipdir
 	 * @return fileList
 	 */
-	public String[] getFiles(String sipdir) { 
+	public String[] getFiles(String sipdir) {
 		File dir = new File(sipdir);
 		String[] fileList = dir.list(new FilenameFilter() {
 		    public boolean accept(File d, String name) {
@@ -48,21 +48,21 @@ public class LoaderIO {
 		});
 		return fileList;
 	}
-	
+
 	/**
-	 * extracts a given Hadoop sequence file into a local temporary sips directory. 
+	 * extracts a given Hadoop sequence file into a local temporary sips directory.
 	 * @param pathToFile
 	 * @param sipdir
 	 * @throws IOException
 	 */
 	public void extractSeqFile(String pathToFile) throws IOException {
-		
+
 		Path seqFilePath = new Path(pathToFile);
 		Map configuration = this.checkFS(pathToFile);
         SequenceFile.Reader reader = new SequenceFile.Reader((FileSystem)configuration.get("fs"), seqFilePath , (Configuration)configuration.get("conf"));
         Text key = new Text();
         BytesWritable val = new BytesWritable();
-        logger.info("Extract Sequence File:"); 
+        logger.info("Extract Sequence File:");
         while (reader.next(key, val)) {
           int index = key.toString().lastIndexOf("/");
           String filename = key.toString().substring(index+1);
@@ -79,17 +79,17 @@ public class LoaderIO {
         }
         logger.info("Finish extract Sequence file");
       }
-	
+
 	/**
 	 * extract the XML files out of a zipped folder
 	 * @param patToFile
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public void extractZipFile(String pathToFile) throws IOException {
-		
+
 		ZipInputStream zis =
 	              new ZipInputStream(new FileInputStream(pathToFile));
-	      
+
 	    byte[] buffer = new byte[4096];
 	    ZipEntry ze;
 	    while ((ze = zis.getNextEntry()) != null) {
@@ -102,9 +102,9 @@ public class LoaderIO {
 	       zis.closeEntry();
 	    }
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Generate example mets files in directory, used for testing purpose
 	 * @param numberOfSips
@@ -112,51 +112,51 @@ public class LoaderIO {
 	 * @throws SerializationException
 	 * @throws JAXBException
 	 */
-	public  void generateSips(int numberOfSips) throws FileNotFoundException, SerializationException, JAXBException { 
-		for (int i=0; i<numberOfSips; i++) {
-			String sipFileName = "sips/mets_entity_" + i + ".xml";
-			java.io.File xmlFile=new java.io.File(sipFileName);
-			IntellectualEntity entity=eu.scapeproject.model.TestUtil.createTestEntity("entity-1001");
-			FileOutputStream out=new FileOutputStream(xmlFile);
-			ScapeMarshaller.newInstance().serialize(entity, out);
-		}
-	}
-	
+//	public  void generateSips(int numberOfSips) throws FileNotFoundException, SerializationException, JAXBException {
+//		for (int i=0; i<numberOfSips; i++) {
+//			String sipFileName = "sips/mets_entity_" + i + ".xml";
+//			java.io.File xmlFile=new java.io.File(sipFileName);
+//			IntellectualEntity entity=eu.scape_project.model.TestUtil.createTestEntity("entity-1001");
+//			FileOutputStream out=new FileOutputStream(xmlFile);
+//			ScapeMarshaller.newInstance().serialize(entity, out);
+//		}
+//	}
+
 	/**
 	 * cleans the local sips directory
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	public void cleandir() throws IOException { 
+	public void cleandir() throws IOException {
 		File sips = new File("sips/");
 		sips.mkdir();
 		FileUtils.cleanDirectory(sips);
 	}
-	
-	private Map checkFS(String pathtofile) throws IOException { 
-		
-		File file = new File(pathtofile); 
+
+	private Map checkFS(String pathtofile) throws IOException {
+
+		File file = new File(pathtofile);
 		Configuration conf = new Configuration();
-		
+
 		// If file does not exists on local file system check if it lives on HDFS
-		String hadoop_home = ""; 
-		if (!file.exists()) { 
+		String hadoop_home = "";
+		if (!file.exists()) {
 			hadoop_home = System.getenv("HADOOP_HOME");
-			if (hadoop_home != null && hadoop_home.length() > 0 ) { 
+			if (hadoop_home != null && hadoop_home.length() > 0 ) {
 				conf.addResource(new Path(hadoop_home+"/conf/core-site.xml"));
 				conf.addResource(new Path(hadoop_home+"/conf/hdfs-site.xml"));
-			} else { 
+			} else {
 				System.out.println("ERROR: HADOOP_HOME not set!");
 				System.exit(0);
 			}
-			
+
 		}
-		
+
 		FileSystem fs = FileSystem.get(conf);
 		Map map = new HashMap();
 		map.put("conf", conf);
 		map.put("fs", fs);
         return map;
-		
+
 	}
 
 }

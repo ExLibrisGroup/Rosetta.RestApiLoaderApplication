@@ -1,9 +1,8 @@
 package eu.scapeproject.pt.main;
 
+import java.io.IOException;
 import java.net.URI;
-import java.net.URLEncoder;
-import java.util.Deque;
-import java.util.concurrent.ExecutorService;
+import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -12,21 +11,13 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.ParseException;
-
-import eu.scapeproject.Sip.STATE;
-import eu.scapeproject.pt.auth.EsciDocAuthentication;
-import eu.scapeproject.pt.auth.IAuthentication;
-import eu.scapeproject.pt.main.Options;
-import eu.scapeproject.pt.threads.LifecycleRunnable;
-import eu.scapeproject.pt.threads.StopLifecycelTask;
-
 import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-
 import eu.scapeproject.LoaderApplication;
-import eu.scapeproject.Sip;
+import eu.scapeproject.pt.threads.LifecycleRunnable;
+import eu.scapeproject.pt.threads.StopLifecycelTask;
 
 
 /**
@@ -47,40 +38,42 @@ import eu.scapeproject.Sip;
  *-t,--period <arg>           Period in min to fetch lifecycle states
  *                            [default: 100 min].
  *-u,--username <arg>         username of the repository user.
- *                    
+ *
  * @author mhn
  *
  */
 public class Loader {
-	
+
 	private static Logger logger =  Logger.getLogger(Loader.class.getName());
-	
-	
-	public static void main(String[] args) throws ParseException {
-		
+
+
+	public static void main(String[] args) throws ParseException, IOException {
+
 		CommandLineParser cmdParser = new PosixParser();
 		CommandLine cmd = cmdParser.parse(Options.OPTIONS, args);
 		Configuration conf = new Configuration();
-		PropertyConfigurator.configure("log4j.properties");
-		
+		Properties props = new Properties();
+		props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("log4j.properties"));
+		PropertyConfigurator.configure(props);
+
 		if ((args.length == 0) || (cmd.hasOption(Options.HELP_OPT))) {
             Options.exit("Usage", 0);
         } else {
             Options.initOptions(cmd, conf);
-		
+
 		try {
 			//LoaderApplication loaderapp = new LoaderApplication(conf, new EsciDocAuthentication(conf));
 			LoaderApplication loaderapp = new LoaderApplication(conf);
-			
+
 			loaderapp.cleanQueue();
-			
+
 			// fetch sips from directory
 			LoaderIO io = new LoaderIO();
-			io.cleandir(); 
-			
-			// fetch sips from a sequence file or a given directory? 
+			io.cleandir();
+
+			// fetch sips from a sequence file or a given directory?
 			if (conf.getDir().contains(".seq")) {
-				logger.info("A sequence file has been identified."); 
+				logger.info("A sequence file has been identified.");
 				io.extractSeqFile(conf.getDir());
 				// local source dir where the seq file has been extracted to
 				conf.setDir("sips/");
@@ -89,44 +82,42 @@ public class Loader {
 				io.extractZipFile(conf.getDir());
 				conf.setDir("sips/");
 			}
-			
+
 			String[] files = io.getFiles(conf.getDir());
 			if (files != null  && files.length > 0) {
-				
+
 				for (int i = 0; i < files.length; i++) {
-					loaderapp.enqueuSip(URI.create("file:" + conf.getDir() +  files[i]));
+					loaderapp.enqueuSip(URI.create("file:" + conf.getDir().replace('\\', '/') +  files[i]));
 				}
-				
+
 				// ingest
-				loaderapp.ingestIEs();	
-					
+				loaderapp.ingestIEs(conf);
+
 				// retrieve lifecycle state as a scheduled task
 				if (conf.getChecklifecycle()=="true") {
-				  logger.info("Retrieve lifecycle states in " + conf.getPeriod() + " minutes - please be patient.");
-				  //logger.info("System will be shutdown automatically after " + 10*Integer.parseInt(conf.getPeriod()) + " minutes.");
+					logger.info("Retrieve lifecycle states in " + conf.getPeriod() + " minutes - please be patient.");
+					logger.info("System will be shutdown automatically after " + 5*Integer.parseInt(conf.getPeriod()) + " minutes, if no deposits are waiting.");
 
 					ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-					// the period depends on the number of objects.
 					ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(new LifecycleRunnable(scheduler, loaderapp, conf.getPeriod()), Integer.parseInt(conf.getPeriod()),Integer.parseInt(conf.getPeriod()), TimeUnit.MINUTES);
-					future.get();
-				
-					ScheduledFuture<?> stop = scheduler.schedule(new StopLifecycelTask(future,scheduler,loaderapp), 10*Integer.parseInt(conf.getPeriod()), TimeUnit.MINUTES);
+
+					ScheduledFuture<?> stop = scheduler.schedule(new StopLifecycelTask(future,scheduler,loaderapp), 5*Integer.parseInt(conf.getPeriod()), TimeUnit.MINUTES);
 					stop.get();
 				}
 			} else {
 				System.out.println("Empty directory. No SIPs to process");
 			}
-			
+
 			loaderapp.shutdown();
 			System.exit(0);
-			
+
 		} catch (Exception e) {
-			
+
 			e.printStackTrace();
-		} 
+		}
 	   }
-	
+
 	 }
-	
+
 
 }

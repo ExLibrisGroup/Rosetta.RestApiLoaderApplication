@@ -7,9 +7,9 @@
 	<packaging>jar</packaging>
 	<dependencies>
 		<dependency>
-			<groupId>eu.scapeproject.model</groupId>
+			<groupId>eu.scape-project.model</groupId>
 			<artifactId>scape-platform-datamodel</artifactId>
-			<version>0.1.4-SNAPSHOT</version>
+			<version>0.1.4</version>
 		</dependency>
 		<!-- dependency>
 			<groupId>de.congrace</groupId>
@@ -72,8 +72,8 @@
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-core</artifactId>
-  			<version>0.20.2-cdh3u4</version>
-  		</dependency>	
+  			<version>0.20.2</version>
+  		</dependency>
 	</dependencies>
 
 	<build>
@@ -87,10 +87,25 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+			<plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-jar-plugin</artifactId>
+	            <configuration>
+	                <archive>
+	                    <manifest>
+	                        <addClasspath>true</addClasspath>
+	                        <mainClass>eu.scapeproject.pt.main.Loader</mainClass>
+	                    </manifest>
+	                </archive>
+	            </configuration>
+	        </plugin>
             <plugin>
             	<!--  mvn clean package assembly:assembly -->
        			<artifactId>maven-assembly-plugin</artifactId>
         		<configuration>
+	        		<!-- <descriptors>
+	                    <descriptor>src/assembly/bin.xml</descriptor>
+	                </descriptors> -->
           			<descriptorRefs>
             			<descriptorRef>jar-with-dependencies</descriptorRef>
           			</descriptorRefs>
@@ -110,6 +125,44 @@
                     </execution>
                 </executions>
       		</plugin>
+      		<plugin>
+                <groupId>org.dstovall</groupId>
+                <artifactId>onejar-maven-plugin</artifactId>
+                <version>1.4.4</version>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <!-- Optional -->
+                            <onejarVersion>0.97</onejarVersion>
+                            <!-- Optional, use only if you need to include native libraries (dll's)
+                            <binlibs>
+                                <fileSet>
+                                    <directory>${project.build.directory}/dllextract</directory>
+                                    <includes>
+                                        <include>test.dll</include>
+                                    </includes>
+                                </fileSet>
+                            </binlibs>-->
+                            <!-- Optional, default is false -->
+                            <attachToBuild>true</attachToBuild>
+                            <!-- Optional, default is "onejar" -->
+                            <classifier>onejar</classifier>
+                        </configuration>
+                        <goals>
+                            <goal>one-jar</goal>
+                        </goals>
+                        <!-- NOTE: to remove nasty errors when the jar is loaded:
+                        	remove hsqldb-1.8.0.10.jar & jsp-2.1-6.1.14.jar from the jar's lib folder manually -->
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
+
+	<pluginRepositories>
+        <pluginRepository>
+            <id>onejar-maven-plugin.googlecode.com</id>
+            <url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
